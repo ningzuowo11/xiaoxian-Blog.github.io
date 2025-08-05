@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>可鹿</title>
+      <link href="/2025/08/04/%E9%B9%BF/"/>
+      <url>/2025/08/04/%E9%B9%BF/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>谈不上高兴，谈不上伤心，只觉得无聊和无奈。<br><img src="/./pic/%E5%BD%95%E5%8F%96%E9%80%9A%E7%9F%A5%E4%B9%A6.jpg" alt="img"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 炒 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 夏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>美化小课堂</title>
       <link href="/2025/08/01/markdown1/"/>
       <url>/2025/08/01/markdown1/</url>
@@ -33,7 +58,7 @@
       <link href="/2025/08/01/8.1%E5%BB%BA%E5%86%9B%E8%8A%82/"/>
       <url>/2025/08/01/8.1%E5%BB%BA%E5%86%9B%E8%8A%82/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><div style="text-align:center;font-size:24px">【七律.长征】</div>红军不怕远征难，万水千山只等闲。<br>五岭逶迤腾细浪，乌蒙磅礴走泥丸。<br>金沙水拍云崖暖，大渡桥横铁索寒。<br>更喜岷山千里雪，三军过后尽开颜。<br><div style="text-align:center;font-size:24px">【清平乐·六盘山】</div>天高云淡，望断南飞雁。<br>不到长城非好汉，屈指行程二万。<br>六盘山上高峰，红旗漫卷西风。<br>今日长缨在手，何时缚住苍龙？<br><div style="  text-align:center;  font-size:2rem;  color: #ff9090ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.8);">   勿忘国耻！！！</div><p><img src="/./pic/4.jpg" alt="img"></p>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><div style="text-align:center;font-size:24px">【七律.长征】</div>红军不怕远征难，万水千山只等闲。<br>五岭逶迤腾细浪，乌蒙磅礴走泥丸。<br>金沙水拍云崖暖，大渡桥横铁索寒。<br>更喜岷山千里雪，三军过后尽开颜。<br><div style="text-align:center;font-size:24px">【清平乐·六盘山】</div>天高云淡，望断南飞雁。<br>不到长城非好汉，屈指行程二万。<br>六盘山上高峰，红旗漫卷西风。<br>今日长缨在手，何时缚住苍龙？<br><div style="  text-align:center;  font-size:2rem;  color: #ff9090ff;  text-shadow: 0px 0px 4px rgba(0,0,0,0.3);">   勿忘国耻！！！</div><p><img src="/./pic/4.jpg" alt="img"></p>]]></content>
       
       
       <categories>
@@ -204,22 +229,11 @@
     
     
     <entry>
-      <title></title>
-      <link href="/js/universe.css"/>
-      <url>/js/universe.css</url>
+      <title>link</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
       
-        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/css/custom.css"/>
-      <url>/css/custom.css</url>
-      
-        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
     </entry>
     
@@ -237,17 +251,6 @@
     
     
     <entry>
-      <title>电影</title>
-      <link href="/movies/index.html"/>
-      <url>/movies/index.html</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  【你的名字】</p><p><img src="https://i.ecywang.com/upload/1/img2.baidu.com/it/u=612133522,3540163861&fm=253&fmt=auto&app=138&f=JPEG?w=1422&h=800" alt="你的名字"></p><p style="text-align:center; font-size:1.5em;">  【像花束般的恋爱】</p><p><img src="https://k.sinaimg.cn/n/sinakd10110/133/w2000h1333/20220219/8c35-cbdc88fc5aa21336221ee4a5000e287a.jpg/w700d1q75cms.jpg?by=cms_fixed_width" alt="像花束般的恋爱"></p>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>comments</title>
       <link href="/comments/index.html"/>
       <url>/comments/index.html</url>
@@ -259,11 +262,11 @@
     
     
     <entry>
-      <title>link</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
+      <title>电影</title>
+      <link href="/movies/index.html"/>
+      <url>/movies/index.html</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  【你的名字】</p><p><img src="https://i.ecywang.com/upload/1/img2.baidu.com/it/u=612133522,3540163861&fm=253&fmt=auto&app=138&f=JPEG?w=1422&h=800" alt="你的名字"></p><p style="text-align:center; font-size:1.5em;">  【像花束般的恋爱】</p><p><img src="https://k.sinaimg.cn/n/sinakd10110/133/w2000h1333/20220219/8c35-cbdc88fc5aa21336221ee4a5000e287a.jpg/w700d1q75cms.jpg?by=cms_fixed_width" alt="像花束般的恋爱"></p>]]></content>
       
     </entry>
     
@@ -275,6 +278,28 @@
       <url>/music/index.html</url>
       
         <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  已被作者隐藏</p>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/css/custom.css"/>
+      <url>/css/custom.css</url>
+      
+        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/js/universe.css"/>
+      <url>/js/universe.css</url>
+      
+        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
       
     </entry>
     
