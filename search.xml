@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>日常【一】</title>
+      <link href="/2025/08/24/%E6%97%A5%E5%B8%B8/"/>
+      <url>/2025/08/24/%E6%97%A5%E5%B8%B8/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><div style="  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.4);">  酱酱，“ningzuowo.xin”成功注册而却续费也不是非常贵，非常的有性价比，最关键的是国外也可以访问，也不知道樱花妹会不会光顾一下，哈哈哈，当然这是痴人说梦。今天还成功配置了Emby，出了不少问题，比如配置网络模式的时候最好用host，又由于寡人不会魔法上网所以在刮削上很麻烦，不过可以通过更改TMDB API 和TMDN 图片网址。目前遇到的问题大多能接受,唯独接受不了别人不规范命名，那些贼喜欢用（）和不知道几个空格的人，真该被我狠狠撅一顿。事已至此，不吐槽了，提醒一下以后的自己，记得要清理缓.</div>]]></content>
+      
+      
+      <categories>
+          
+          <category> 饭 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 日常 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>摄影技巧【一】</title>
       <link href="/2025/08/20/%E6%91%84%E5%BD%B1%E6%8A%80%E5%B7%A7%E3%80%90%E4%B8%80%E3%80%91/"/>
       <url>/2025/08/20/%E6%91%84%E5%BD%B1%E6%8A%80%E5%B7%A7%E3%80%90%E4%B8%80%E3%80%91/</url>
@@ -332,31 +357,9 @@
     
     
     <entry>
-      <title>comments</title>
-      <link href="/comments/index.html"/>
-      <url>/comments/index.html</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!-- GitCalendar容器 --><div id="gitZone"></div>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>归档</title>
       <link href="/archives/index.html"/>
       <url>/archives/index.html</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
       
         <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
@@ -376,9 +379,9 @@
     
     
     <entry>
-      <title>link</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
         <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
@@ -398,11 +401,11 @@
     
     
     <entry>
-      <title>tags</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title></title>
+      <link href="/js/universe.css"/>
+      <url>/js/universe.css</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
       
     </entry>
     
@@ -420,11 +423,33 @@
     
     
     <entry>
-      <title></title>
-      <link href="/js/universe.css"/>
-      <url>/js/universe.css</url>
+      <title>comments</title>
+      <link href="/comments/index.html"/>
+      <url>/comments/index.html</url>
       
-        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!-- GitCalendar容器 --><div id="gitZone"></div>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>tags</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>link</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
     </entry>
     
