@@ -133,7 +133,7 @@
       <link href="/2025/08/29/%E9%A5%AD/Ubuntu%E7%B3%BB%E7%BB%9F/"/>
       <url>/2025/08/29/%E9%A5%AD/Ubuntu%E7%B3%BB%E7%BB%9F/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);"> 系统安装</div>准备一个iso系统文件，一个30G左右的U盘，拷贝软件balenaEtcher，以及解除写保护的神器Diskgenius。<br>将下载好的iso文件通过balena拷贝进入U盘，因为拷贝的时候会格式化U盘建议先备份重要文件，如果遇到写保护，可以用dikkgenius删除U盘下的的所有分区，然后在新建并保存一个分区。<br><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);"> 装机必备--搜狗输入法</div><div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);">  1、添加中文语言支持</div>首先打开系统设置——区域和语言——管理已安装的语言——在“语言”tab下——点击“添加或删除语言”（正常情况下初次登录系统会引导你安装），接着回到“语言支持”窗口，在键盘输入法系统中，选择“fcitx”，并应用到整个系统。<br><div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(255, 176, 176, 0.3);">  2、通过命令行安装搜狗输入法</div>sudo dpkg -i sogoupinyin_版本号_amd64.deb<br>sudo apt -f install<br><div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);">  3，注销计算机即可正常使用搜狗输入法</div>a，更新源，在终端执行<br>sudo apt update<br>b，安装fcitx输入法框架，因为搜狗是基于fcitx开发的，如果不装就不能正常运行<br>sudo apt install fcitx<br>c，设置fcitx为系统输入法<br>d，设置fcitx开机自启动<br>sudo cp /usr/share/applications/fcitx.desktop /etc/xdg/autostart/<br>e，卸载系统ibus输入法框架<br>sudo apt purge ibus<div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(255, 176, 176, 0.3);">  4、安装搜狗输入法</div>安装输入法<br>sudo dpkg -i 安装包<br>安装依赖<br>sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2<br>sudo apt install libgsettings-qt1<div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);">  解决搜狗老是闪烁无法正常使用</div>将#Wayland前面的#删去即可<br>sudo nano /etc/gdm3/custom.conf如果安装了vim也用vi。<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(11, 10, 10, 0.3);">  安装docker</div>sudo apt install docker.io<div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);">  几个常用的指令</div>  <div style="  background-color: rgba(64, 45, 45, 1); /* 浅灰透明背景（最后一个值控制透明度） */  padding: 1.5rem;  border-radius: 6px;  border: 1px solid rgba(0, 0, 0, 1); /* 透明边框 */  margin: 1rem 0;">  <!-- 要展示的代码块 -->  <pre><code>&lt;sudo systemctl status docker 查看运行状况<br>docker pull 拉取镜像<br>docker images 列出镜像<br>docker run 运行容器<br>docker stop 列出容器<br>docker start 停止容器<br>docker exec -it 启动容器<br>docker logs -f 进入容器<br>docker rm 删除容器<br>docker rmi 删除镜像</div><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);">  RustDesk远程控制（熄屏状态下也可以）</div>彻底摆脱会员制<br>官网https://github.com/rustdesk/rustdesk/releases，我用的是UbuntuX86版本<br>接着<br>sudo apt update<br>sudo apt install ./rustdesk-1.2.3-2-x86_64.deb<br>Ubuntu默认的显示器程序是wayland，在息屏状态下远程软件无法唤醒屏幕。为了能唤醒屏幕我们需要改成xorg。只需要把#Waylang前的#删了<br>sudo vi /etc/gdm3/custom.conf<br>接着，修改rustdesk设置设置->安全->允许IP直接访问，使用默认端口，这样在家里就可以不使用中继服务器，而是IP直连，提高速度并去设置固定密码。<br>最后在搞网络设置ID和中继填自己的服务器ip，端口在21116到21119之间<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.32);">  安装SSH-server</div>sudo apt openssh-server<br>控制方，在终端输入ssh 被控用户名@被控用户ip<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 1);">  安装HomeAssistant</div><p>mkdir -p &#x2F;home&#x2F;tech-shrimp&#x2F;homeassistant<br><br> <div style="  background-color: rgba(64, 45, 45, 1); /* 浅灰透明背景（最后一个值控制透明度） */  padding: 1.5rem;  border-radius: 6px;  border: 1px solid rgba(0, 0, 0, 1); /* 透明边框 */  margin: 1rem 0;"><br>  <!-- 要展示的代码块 --><br>  <pre><code>&lt;<br>mkdir -p /home/tech-shrimp/homeassistant<br></p><p>   sudo docker run -d &lt;br><br>  --name homeassistant &lt;br><br>  --privileged &lt;br><br>  --restart=unless-stopped &lt;br><br>  -e TZ=Asia/Shanghai &lt;br><br>  -v /home/用户名/homeassistant:/config &lt;br><br>  -v /run/dbus:/run/dbus:ro &lt;br><br>  --network=host &lt;br><br>  ghcr.io/home-assistant/home-assistant:stable<br></p></div>默认端口8123<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(6, 6, 6, 1);">  安装小雅Alist</div>短tokenhttps://alist.nn.ci/zh/guide/drivers/aliyundrive.html<br>长tokenhttps://alist.nn.ci/tool/aliyundrive/request.html<br>file ID https://www.aliyundrive.com/s/rP9gP3h9asE<br>执行脚本 bash -c "$(curl --insecure -fsSL https://ddsrem.com/xiaoya_install.sh)"<br>账号密码可以在log里找，或者进入容器输入./alist admin<div style="  background-color: rgba(64, 45, 45, 1); /* 浅灰透明背景（最后一个值控制透明度） */  padding: 1.5rem;  border-radius: 6px;  border: 1px solid rgba(0, 0, 0, 1); /* 透明边框 */  margin: 1rem 0;">  <!-- 要展示的代码块 -->  <pre><code>&lt;mkdir -p /home/tech-shrimp/homeassistant<br><p>   sudo docker run -d &lt;br><br>  --name homeassistant &lt;br><br>  --privileged &lt;br><br>  --restart=unless-stopped &lt;br><br>  -e TZ=Asia/Shanghai &lt;br><br>  -v /home/用户名/homeassistant:/config &lt;br><br>  -v /run/dbus:/run/dbus:ro &lt;br><br>  --network=host &lt;br><br>  ghcr.io/home-assistant/home-assistant:stable<br></p></div>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);"> 系统安装</div>准备一个iso系统文件，一个30G左右的U盘，拷贝软件balenaEtcher(可以在ubuntu官网找到)，以及解除写保护的神器Diskgenius。<br>将下载好的iso文件通过balena拷贝进入U盘，因为拷贝的时候会格式化U盘建议先备份重要文件，如果遇到写保护，可以用diskgenius删除U盘下的的所有分区，然后在新建并保存一个分区。<br><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);"> 装机必备--搜狗输入法</div><div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);">  1、添加中文语言支持</div>首先打开系统设置——区域和语言——管理已安装的语言——在“语言”tab下——点击“添加或删除语言”（正常情况下初次登录系统会引导你安装），接着回到“语言支持”窗口，在键盘输入法系统中，选择“fcitx”，并应用到整个系统。<br><div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(255, 176, 176, 0.3);">  2、通过命令行安装搜狗输入法</div>sudo dpkg -i sogoupinyin_版本号_amd64.deb<br>sudo apt -f install<br><div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);">  3，注销计算机即可正常使用搜狗输入法</div>a，更新源，在终端执行<br>sudo apt update<br>b，安装fcitx输入法框架，因为搜狗是基于fcitx开发的，如果不装就不能正常运行<br>sudo apt install fcitx<br>c，设置fcitx为系统输入法<br>d，设置fcitx开机自启动<br>sudo cp /usr/share/applications/fcitx.desktop /etc/xdg/autostart/<br>e，卸载系统ibus输入法框架<br>sudo apt purge ibus<div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(255, 176, 176, 0.3);">  4、安装搜狗输入法</div>安装输入法<br>sudo dpkg -i 安装包<br>安装依赖<br>sudo apt install libqt5qml5 libqt5quick5 libqt5quickwidgets5 qml-module-qtquick2<br>sudo apt install libgsettings-qt1<div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);">  解决搜狗老是闪烁无法正常使用</div>将#Wayland前面的#删去即可<br>sudo nano /etc/gdm3/custom.conf如果安装了vim也用vi。<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(11, 10, 10, 0.3);">  安装docker</div>sudo apt install docker.io<div style="  text-align:center;  font-size:1rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);">  几个常用的指令</div>  <div style="  background-color: rgba(64, 45, 45, 1); /* 浅灰透明背景（最后一个值控制透明度） */  padding: 1.5rem;  border-radius: 6px;  border: 1px solid rgba(0, 0, 0, 1); /* 透明边框 */  margin: 1rem 0;">  <!-- 要展示的代码块 -->  <pre><code>&lt;sudo systemctl status docker 查看运行状况<br>docker pull 拉取镜像<br>docker images 列出镜像<br>docker run 运行容器<br>docker stop 列出容器<br>docker start 停止容器<br>docker exec -it 启动容器<br>docker logs -f 进入容器<br>docker rm 删除容器<br>docker rmi 删除镜像</div><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);">  RustDesk远程控制（熄屏状态下也可以）</div>彻底摆脱会员制<br>官网https://github.com/rustdesk/rustdesk/releases，我用的是UbuntuX86版本<br>接着<br>sudo apt update<br>sudo apt install ./rustdesk-1.2.3-2-x86_64.deb<br>Ubuntu默认的显示器程序是wayland，在息屏状态下远程软件无法唤醒屏幕。为了能唤醒屏幕我们需要改成xorg。只需要把#Waylang前的#删了<br>sudo vi /etc/gdm3/custom.conf<br>接着，修改rustdesk设置设置->安全->允许IP直接访问，使用默认端口，这样在家里就可以不使用中继服务器，而是IP直连，提高速度并去设置固定密码。<br>最后在搞网络设置ID和中继填自己的服务器ip，端口在21116到21119之间<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.32);">  安装SSH-server</div>sudo apt openssh-server<br>控制方，在终端输入ssh 被控用户名@被控用户ip<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0, 0, 0, 1);">  安装HomeAssistant</div><p>mkdir -p &#x2F;home&#x2F;tech-shrimp&#x2F;homeassistant<br><br> <div style="  background-color: rgba(64, 45, 45, 1); /* 浅灰透明背景（最后一个值控制透明度） */  padding: 1.5rem;  border-radius: 6px;  border: 1px solid rgba(0, 0, 0, 1); /* 透明边框 */  margin: 1rem 0;"><br>  <!-- 要展示的代码块 --><br>  <pre><code>&lt;<br>mkdir -p /home/tech-shrimp/homeassistant<br></p><p>   sudo docker run -d &lt;br><br>  --name homeassistant &lt;br><br>  --privileged &lt;br><br>  --restart=unless-stopped &lt;br><br>  -e TZ=Asia/Shanghai &lt;br><br>  -v /home/用户名/homeassistant:/config &lt;br><br>  -v /run/dbus:/run/dbus:ro &lt;br><br>  --network=host &lt;br><br>  ghcr.io/home-assistant/home-assistant:stable<br></p></div>默认端口8123<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(6, 6, 6, 1);">  安装小雅Alist</div>短tokenhttps://alist.nn.ci/zh/guide/drivers/aliyundrive.html<br>长tokenhttps://alist.nn.ci/tool/aliyundrive/request.html<br>file ID https://www.aliyundrive.com/s/rP9gP3h9asE<br>执行脚本 bash -c "$(curl --insecure -fsSL https://ddsrem.com/xiaoya_install.sh)"<br>账号密码可以在log里找，或者进入容器输入./alist admin<div style="  background-color: rgba(64, 45, 45, 1); /* 浅灰透明背景（最后一个值控制透明度） */  padding: 1.5rem;  border-radius: 6px;  border: 1px solid rgba(0, 0, 0, 1); /* 透明边框 */  margin: 1rem 0;">  <!-- 要展示的代码块 -->  <pre><code>&lt;mkdir -p /home/tech-shrimp/homeassistant<br><p>   sudo docker run -d &lt;br><br>  --name homeassistant &lt;br><br>  --privileged &lt;br><br>  --restart=unless-stopped &lt;br><br>  -e TZ=Asia/Shanghai &lt;br><br>  -v /home/用户名/homeassistant:/config &lt;br><br>  -v /run/dbus:/run/dbus:ro &lt;br><br>  --network=host &lt;br><br>  ghcr.io/home-assistant/home-assistant:stable<br></p></div>]]></content>
       
       
       <categories>
@@ -532,22 +532,11 @@
     
     
     <entry>
-      <title>comments</title>
-      <link href="/comments/index.html"/>
-      <url>/comments/index.html</url>
+      <title></title>
+      <link href="/css/custom.css"/>
+      <url>/css/custom.css</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!-- GitCalendar容器 --><div id="gitZone"></div>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}]]></content>
       
     </entry>
     
@@ -565,28 +554,6 @@
     
     
     <entry>
-      <title></title>
-      <link href="/js/universe.css"/>
-      <url>/js/universe.css</url>
-      
-        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/css/custom.css"/>
-      <url>/css/custom.css</url>
-      
-        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>电影</title>
       <link href="/movies/index.html"/>
       <url>/movies/index.html</url>
@@ -598,11 +565,22 @@
     
     
     <entry>
-      <title>音乐</title>
-      <link href="/music/index.html"/>
-      <url>/music/index.html</url>
+      <title></title>
+      <link href="/js/universe.css"/>
+      <url>/js/universe.css</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  已被作者隐藏</p>]]></content>
+        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>tags</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
     </entry>
     
@@ -620,11 +598,33 @@
     
     
     <entry>
-      <title>tags</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title>音乐</title>
+      <link href="/music/index.html"/>
+      <url>/music/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  已被作者隐藏</p>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
         <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>comments</title>
+      <link href="/comments/index.html"/>
+      <url>/comments/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!-- GitCalendar容器 --><div id="gitZone"></div>]]></content>
       
     </entry>
     
