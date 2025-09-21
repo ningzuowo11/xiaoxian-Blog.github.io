@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>大学日记</title>
+      <link href="/2025/09/21/%E7%82%92/%E5%A4%A7%E5%AD%A6/"/>
+      <url>/2025/09/21/%E7%82%92/%E5%A4%A7%E5%AD%A6/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>今天是2025.9.21，开学第二天，今天遇到一件很操蛋的事情，学长来寝室推销，但是作为机智的我反套路学长0.8元。在逛学校的时候发现一些不错的取景点，一个青藤走廊，一个花津湖。<br>室友也挺不错。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 炒 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 大学生活 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>三国刘备【六】</title>
       <link href="/2025/09/08/%E9%A5%AD/%E5%88%98%E5%A4%876/"/>
       <url>/2025/09/08/%E9%A5%AD/%E5%88%98%E5%A4%876/</url>
@@ -543,17 +568,6 @@
     
     
     <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>comments</title>
       <link href="/comments/index.html"/>
       <url>/comments/index.html</url>
@@ -587,22 +601,22 @@
     
     
     <entry>
-      <title></title>
-      <link href="/js/universe.css"/>
-      <url>/js/universe.css</url>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
-        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
     </entry>
     
     
     
     <entry>
-      <title>tags</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title></title>
+      <link href="/js/universe.css"/>
+      <url>/js/universe.css</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
       
     </entry>
     
@@ -625,6 +639,17 @@
       <url>/movies/index.html</url>
       
         <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  【你的名字】</p><p><img src="https://i.ecywang.com/upload/1/img2.baidu.com/it/u=612133522,3540163861&fm=253&fmt=auto&app=138&f=JPEG?w=1422&h=800" alt="你的名字"></p><p style="text-align:center; font-size:1.5em;">  【像花束般的恋爱】</p><p><img src="https://k.sinaimg.cn/n/sinakd10110/133/w2000h1333/20220219/8c35-cbdc88fc5aa21336221ee4a5000e287a.jpg/w700d1q75cms.jpg?by=cms_fixed_width" alt="像花束般的恋爱"></p>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>tags</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
     </entry>
     
