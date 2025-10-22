@@ -4,11 +4,36 @@
   
     
     <entry>
+      <title>Proxychains4</title>
+      <link href="/2025/10/22/%E9%A5%AD/proxychains4/"/>
+      <url>/2025/10/22/%E9%A5%AD/proxychains4/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>一款非常好用的工具<br><br>以下是只针Linux系统的安装<br><br>sudo apt update<br><br>sudo apt install proxychains 安装<br><br>proxychains4 -h 验证<br><br>sudo nano &#x2F;etc&#x2F;proxychains4.conf 配置</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 蛋 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> tips </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Rustdesk</title>
       <link href="/2025/10/22/%E9%A5%AD/Rustdesk/"/>
       <url>/2025/10/22/%E9%A5%AD/Rustdesk/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  Rustdesk</div>一款专为自托管而设计的开源远程桌面应用程序，主打轻量、安全和高性能，适合个人和企业用户进行远程办公、技术支持等操作，付费远程软件的替代方案。<br><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  亮点与功能</div>远程桌面控制：支持跨平台（Windows、macOS、Linux、Android、iOS）的远程访问和控制。<br><p>文件传输：可直接在本地和远程设备间传输文件。<br></p><p>TCP&#x2F;UDP 穿透：优先尝试点对点（P2P）直连，减少延迟；若失败则自动通过中继服务器转发。<br></p><p>端到端加密：默认使用加密数据传输，保障远程链接安全性。<br></p><p>自建服务器：允许用户私有化部署中继服务器（开源版本支持），避免依赖第三方服务。<br></p><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  自托管部署</div>ssh root@服务器IP地址 使用SSH连接服务器<br>sudo apt update<br>sudo apt upgrade 更新<br>sudo ufw enable<br>sudo ufw allow ssh<br>sudo ufw allow 21115:21117/tcp<br>sudo ufw allow 21116/udp 开启防火墙（可以在控制台自己开）<br>mkdir /var/lib/rustdesk-server/ 创建文件<br>sudo useradd -r -s /bin/false rustdesk<br>sudo chown -R rustdesk:rustdesk /var/lib/rustdesk-server/ 新建专用用户<br>cd /var/lib/rustdesk-server/ 切换位置<br>wget https://github.com/rustdesk/rustdesk-server/releases/latest/download/rustdesk-server-linux-amd64.zip  下载 RustDesk Server 文件<br>unzip rustdesk-server-linux-amd64.zip 解压文件<br>mv /var/lib/rustdesk-server/amd64/hbbr /usr/bin/<br>mv /var/lib/rustdesk-server/amd64/hbbs /usr/bin/ 移动文件<br>sudo nano /etc/systemd/system/hbbr.service 创建配置文件<br>'''<br>[Unit]<br>Description=Rustdesk Server hbbr<br><p>[Service]<br><br>Type&#x3D;simple<br><br>LimitNOFILE&#x3D;1000000<br><br>ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;hbbr<br><br>WorkingDirectory&#x3D;&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;<br><br>User&#x3D;rustdesk<br><br>Group&#x3D;rustdesk<br><br>Restart&#x3D;always<br><br>StandardOutput&#x3D;append:&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;hbbr.log<br><br>StandardError&#x3D;append:&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;hbbr.error<br><br>RestartSec&#x3D;10<br></p><p>[Install]<br><br>WantedBy&#x3D;multi-user.target<br><br>‘’’<br><br>sudo nano &#x2F;etc&#x2F;systemd&#x2F;system&#x2F;hbbs.service 创建配置文件<br><br>‘’’<br><br>[Unit]<br>Description&#x3D;Rustdesk Server hbbs<br></p><p>[Service]<br><br>Type&#x3D;simple<br><br>LimitNOFILE&#x3D;1000000<br><br>ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;hbbs<br><br>WorkingDirectory&#x3D;&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;<br><br>User&#x3D;rustdesk<br><br>Group&#x3D;rustdesk<br><br>Restart&#x3D;always<br><br>StandardOutput&#x3D;append:&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;hbbs.log<br><br>StandardError&#x3D;append:&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;hbbs.error<br><br>RestartSec&#x3D;10<br></p><p>[Install]<br><br>WantedBy&#x3D;multi-user.target<br><br>‘’’<br><br>sudo systemctl enable hbbs.service<br><br>sudo systemctl enable hbbr.service 开机启动<br><br>sudo systemctl start hbbs.service<br><br>sudo systemctl start hbbr.service 启动软件<br><br>sudo systemctl status hbbs.service<br><br>sudo systemctl status hbbr.service 查看状态<br><br>sudo cat &#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;id_ed25519.pub 查看密钥<br></p>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  Rustdesk</div>一款专为自托管而设计的开源远程桌面应用程序，主打轻量、安全和高性能，适合个人和企业用户进行远程办公、技术支持等操作，付费远程软件的替代方案。<br><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  亮点与功能</div>远程桌面控制：支持跨平台（Windows、macOS、Linux、Android、iOS）的远程访问和控制。<br>文件传输：可直接在本地和远程设备间传输文件。<br>TCP/UDP 穿透：优先尝试点对点（P2P）直连，减少延迟；若失败则自动通过中继服务器转发。<br>端到端加密：默认使用加密数据传输，保障远程链接安全性。<br>自建服务器：允许用户私有化部署中继服务器（开源版本支持），避免依赖第三方服务。<br><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  自托管部署</div>ssh root@服务器IP地址 使用SSH连接服务器<br>sudo apt update<br>sudo apt upgrade 更新<br>sudo ufw enable<br>sudo ufw allow ssh<br>sudo ufw allow 21115:21117/tcp<br>sudo ufw allow 21116/udp 开启防火墙（可以在控制台自己开）<br>mkdir /var/lib/rustdesk-server/ 创建文件<br>sudo useradd -r -s /bin/false rustdesk<br>sudo chown -R rustdesk:rustdesk /var/lib/rustdesk-server/ 新建专用用户<br>cd /var/lib/rustdesk-server/ 切换位置<br>wget https://github.com/rustdesk/rustdesk-server/releases/latest/download/rustdesk-server-linux-amd64.zip  下载 RustDesk Server 文件<br>unzip rustdesk-server-linux-amd64.zip 解压文件<br>mv /var/lib/rustdesk-server/amd64/hbbr /usr/bin/<br>mv /var/lib/rustdesk-server/amd64/hbbs /usr/bin/ 移动文件<br>sudo nano /etc/systemd/system/hbbr.service 创建配置文件<hr><p>[Unit]<br>Description&#x3D;Rustdesk Server hbbr</p><p>[Service]<br>Type&#x3D;simple<br>LimitNOFILE&#x3D;1000000<br>ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;hbbr<br>WorkingDirectory&#x3D;&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;<br>User&#x3D;rustdesk<br>Group&#x3D;rustdesk<br>Restart&#x3D;always<br>StandardOutput&#x3D;append:&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;hbbr.log<br>StandardError&#x3D;append:&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;hbbr.error<br>RestartSec&#x3D;10</p><p>[Install]<br>WantedBy&#x3D;multi-user.target</p><hr><p>sudo nano &#x2F;etc&#x2F;systemd&#x2F;system&#x2F;hbbs.service 创建配置文件</p><hr><p>[Unit]<br>Description&#x3D;Rustdesk Server hbbs</p><p>[Service]<br>Type&#x3D;simple<br>LimitNOFILE&#x3D;1000000<br>ExecStart&#x3D;&#x2F;usr&#x2F;bin&#x2F;hbbs<br>WorkingDirectory&#x3D;&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;<br>User&#x3D;rustdesk<br>Group&#x3D;rustdesk<br>Restart&#x3D;always<br>StandardOutput&#x3D;append:&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;hbbs.log<br>StandardError&#x3D;append:&#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;hbbs.error<br>RestartSec&#x3D;10</p><p>[Install]<br>WantedBy&#x3D;multi-user.target</p><hr><p>sudo systemctl enable hbbs.service<br>sudo systemctl enable hbbr.service 开机启动<br>sudo systemctl start hbbs.service<br>sudo systemctl start hbbr.service 启动软件<br>sudo systemctl status hbbs.service<br>sudo systemctl status hbbr.service 查看状态<br>sudo cat &#x2F;var&#x2F;lib&#x2F;rustdesk-server&#x2F;id_ed25519.pub 查看密钥</p>]]></content>
       
       
       <categories>
@@ -582,28 +607,6 @@
     
     
     <entry>
-      <title></title>
-      <link href="/css/custom.css"/>
-      <url>/css/custom.css</url>
-      
-        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>归档</title>
       <link href="/archives/index.html"/>
       <url>/archives/index.html</url>
@@ -615,11 +618,22 @@
     
     
     <entry>
-      <title>comments</title>
-      <link href="/comments/index.html"/>
-      <url>/comments/index.html</url>
+      <title></title>
+      <link href="/css/custom.css"/>
+      <url>/css/custom.css</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!-- GitCalendar容器 --><div id="gitZone"></div>]]></content>
+        <content type="html"><![CDATA[/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 侧边栏个人信息卡片动态渐变色 */#aside-content > .card-widget.card-info {  background: linear-gradient(    -45deg,    #e8d8b9,    #eccec5,    #a3e9eb,    #bdbdf0,    #eec1ea  );  box-shadow: 0 0 5px rgb(66, 68, 68);  position: relative;  background-size: 400% 400%;  -webkit-animation: Gradient 10s ease infinite;  -moz-animation: Gradient 10s ease infinite;  animation: Gradient 10s ease infinite !important;}@-webkit-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@-moz-keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}@keyframes Gradient {  0% {    background-position: 0% 50%;  }  50% {    background-position: 100% 50%;  }  100% {    background-position: 0% 50%;  }}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: #191919ee;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>link</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
     </entry>
     
@@ -637,6 +651,17 @@
     
     
     <entry>
+      <title>comments</title>
+      <link href="/comments/index.html"/>
+      <url>/comments/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!-- GitCalendar容器 --><div id="gitZone"></div>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>电影</title>
       <link href="/movies/index.html"/>
       <url>/movies/index.html</url>
@@ -648,11 +673,11 @@
     
     
     <entry>
-      <title>音乐</title>
-      <link href="/music/index.html"/>
-      <url>/music/index.html</url>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  已被作者隐藏</p>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
     </entry>
     
@@ -670,11 +695,11 @@
     
     
     <entry>
-      <title>link</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
+      <title>音乐</title>
+      <link href="/music/index.html"/>
+      <url>/music/index.html</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  已被作者隐藏</p>]]></content>
       
     </entry>
     
