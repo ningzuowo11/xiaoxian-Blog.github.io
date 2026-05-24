@@ -1566,13 +1566,13 @@ blockquote > :last-child {
 }
 [data-theme='dark'] {
   --hl-color: rgba(255,255,255,0.7);
-  --hl-bg: #171717;
-  --hltools-bg: #1a1a1a;
+  --hl-bg: transparent;
+  --hltools-bg: rgba(255,255,255,0.05);
   --hltools-color: #90a4ae;
-  --hlnumber-bg: #171717;
+  --hlnumber-bg: transparent;
   --hlnumber-color: rgba(255,255,255,0.4);
   --hlscrollbar-bg: #1f1f1f;
-  --hlexpand-bg: linear-gradient(180deg, rgba(23,23,23,0.6), rgba(23,23,23,0.9));
+  --hlexpand-bg: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0));
 }
 @-moz-document url-prefix() {
   scrollbar-color: var(--hlscrollbar-bg) transparent;
@@ -1694,7 +1694,7 @@ figure.highlight pre .javascript .function {
 .container code {
   padding: 2px 5px;
   background: rgba(27,31,35,0.05);
-  color: #000 0;
+  color: #000;
 }
 .container pre {
   padding: 10px 20px;
@@ -6249,10 +6249,10 @@ blockquote.pullquote.right {
   content: '';
 }
 [data-theme='dark'] .container code {
-  background: #2c2c2c;
+  background: transparent;
 }
 [data-theme='dark'] .container pre > code {
-  background: #171717;
+  background: transparent;
 }
 [data-theme='dark'] .container figure.highlight {
   -webkit-box-shadow: none;
@@ -6320,7 +6320,7 @@ blockquote.pullquote.right {
 }
 [data-theme='dark'] #disqusjs #dsqjs .dsqjs-post-body code,
 [data-theme='dark'] #disqusjs #dsqjs .dsqjs-post-body pre {
-  background: #2c2c2c;
+  background: transparent;
 }
 [data-theme='dark'] #disqusjs #dsqjs .dsqjs-post-body blockquote {
   color: rgba(255,255,255,0.7);
@@ -6367,13 +6367,13 @@ blockquote.pullquote.right {
 }
 [data-theme='dark'] .read-mode {
   --font-color: rgba(255,255,255,0.7);
-  --readmode-light-color: #0d0d0d;
+  --readmode-light-color: transparent;
   --white: rgba(255,255,255,0.9);
   --light-grey: rgba(255,255,255,0.7);
   --gray: rgba(255,255,255,0.7);
   --hr-border: rgba(255,255,255,0.5);
   --hr-before-color: rgba(255,255,255,0.7);
-  --highlight-bg: #171717;
+  --highlight-bg: transparent;
   --exit-btn-bg: #1f1f1f;
   --exit-btn-color: rgba(255,255,255,0.9);
   --exit-btn-hover: #525252;
@@ -6439,7 +6439,6 @@ blockquote.pullquote.right {
 .read-mode #post > *:not(#post-info):not(.post-content),
 .read-mode #nav,
 .read-mode #post-outdate-notice,
-.read-mode #web_bg,
 .read-mode #rightside,
 .read-mode .not-top-img {
   display: none !important;
