@@ -929,11 +929,11 @@
     
     
     <entry>
-      <title>docker小问题</title>
-      <link href="/2025/09/02/%E7%82%92/docker/"/>
-      <url>/2025/09/02/%E7%82%92/docker/</url>
+      <title>Ubuntu24.10安装gitlab18.4</title>
+      <link href="/2025/09/02/%E7%82%92/Ubuntu24.10%E5%AE%89%E8%A3%85gitlab/"/>
+      <url>/2025/09/02/%E7%82%92/Ubuntu24.10%E5%AE%89%E8%A3%85gitlab/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>1，一定要避免软件源重复配置<br><br>2，及时更新密钥<br><br>查看密钥状况<br><br>sudo apt-key list<br><br>导出并迁移 Docker CE 密钥<br>sudo apt-key export 密钥后8位 | sudo gpg –dearmour -o &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.d&#x2F;docker-ce-archive.gpg<br><br>备份并删除旧的密钥环文件：<br><br>sudo mv &#x2F;etc&#x2F;apt&#x2F;trusted.gpg &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.backup</p>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>官网:<a href="https://gitlab.com/">https://gitlab.com</a></p><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  启用SSH并打开防火墙端口</div><p>1,安装基本依赖包：<br><br>sudo apt update<br><br>sudo apt install -y curl openssh-server ca-certificates tzdata perl<br><br>2，启用并启动 OpenSSH 服务器守护进程：<br><br>sudo systemctl enable –now ssh<br><br>3，安装后，打开防火墙端口<br><br>sudo ufw allow 22&#x2F;tcp<br><br>sudo ufw allow 80&#x2F;tcp<br><br>sudo ufw allow 443&#x2F;tcp<br><br>sudo ufw enable</p><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  添加GitLab包存储库</div>1，安装所需软件包<br>sudo apt install -y curl<br>2，添加 GitLab 存储库<br>curl "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh" | sudo bash<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  安装命令</div>sudo apt install gitlab-ee或者手动下载（安装包可以在以下网址找到）：https://packages.gitlab.com/gitlab/gitlab-ee]]></content>
       
       
       <categories>
@@ -954,11 +954,11 @@
     
     
     <entry>
-      <title>Ubuntu24.10安装gitlab18.4</title>
-      <link href="/2025/09/02/%E7%82%92/Ubuntu24.10%E5%AE%89%E8%A3%85gitlab/"/>
-      <url>/2025/09/02/%E7%82%92/Ubuntu24.10%E5%AE%89%E8%A3%85gitlab/</url>
+      <title>docker小问题</title>
+      <link href="/2025/09/02/%E7%82%92/docker/"/>
+      <url>/2025/09/02/%E7%82%92/docker/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>官网:<a href="https://gitlab.com/">https://gitlab.com</a></p><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  启用SSH并打开防火墙端口</div><p>1,安装基本依赖包：<br><br>sudo apt update<br><br>sudo apt install -y curl openssh-server ca-certificates tzdata perl<br><br>2，启用并启动 OpenSSH 服务器守护进程：<br><br>sudo systemctl enable –now ssh<br><br>3，安装后，打开防火墙端口<br><br>sudo ufw allow 22&#x2F;tcp<br><br>sudo ufw allow 80&#x2F;tcp<br><br>sudo ufw allow 443&#x2F;tcp<br><br>sudo ufw enable</p><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  添加GitLab包存储库</div>1，安装所需软件包<br>sudo apt install -y curl<br>2，添加 GitLab 存储库<br>curl "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh" | sudo bash<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  安装命令</div>sudo apt install gitlab-ee或者手动下载（安装包可以在以下网址找到）：https://packages.gitlab.com/gitlab/gitlab-ee]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>1，一定要避免软件源重复配置<br><br>2，及时更新密钥<br><br>查看密钥状况<br><br>sudo apt-key list<br><br>导出并迁移 Docker CE 密钥<br>sudo apt-key export 密钥后8位 | sudo gpg –dearmour -o &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.d&#x2F;docker-ce-archive.gpg<br><br>备份并删除旧的密钥环文件：<br><br>sudo mv &#x2F;etc&#x2F;apt&#x2F;trusted.gpg &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.backup</p>]]></content>
       
       
       <categories>
@@ -1418,33 +1418,11 @@
     
     
     <entry>
-      <title>tags</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>comments</title>
       <link href="/comments/index.html"/>
       <url>/comments/index.html</url>
       
         <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!-- GitCalendar容器 --><div id="gitZone"></div>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/js/universe.css"/>
-      <url>/js/universe.css</url>
-      
-        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
       
     </entry>
     
@@ -1462,6 +1440,17 @@
     
     
     <entry>
+      <title>音乐</title>
+      <link href="/music/index.html"/>
+      <url>/music/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  已被作者隐藏</p>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title></title>
       <link href="/css/custom.css"/>
       <url>/css/custom.css</url>
@@ -1473,22 +1462,33 @@
     
     
     <entry>
-      <title>电影</title>
-      <link href="/movies/index.html"/>
-      <url>/movies/index.html</url>
+      <title>tags</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  【你的名字】</p><p><img src="https://i.ecywang.com/upload/1/img2.baidu.com/it/u=612133522,3540163861&fm=253&fmt=auto&app=138&f=JPEG?w=1422&h=800" alt="你的名字"></p><p style="text-align:center; font-size:1.5em;">  【像花束般的恋爱】</p><p><img src="https://k.sinaimg.cn/n/sinakd10110/133/w2000h1333/20220219/8c35-cbdc88fc5aa21336221ee4a5000e287a.jpg/w700d1q75cms.jpg?by=cms_fixed_width" alt="像花束般的恋爱"></p>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
     </entry>
     
     
     
     <entry>
-      <title>音乐</title>
-      <link href="/music/index.html"/>
-      <url>/music/index.html</url>
+      <title></title>
+      <link href="/js/universe.css"/>
+      <url>/js/universe.css</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  已被作者隐藏</p>]]></content>
+        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>电影</title>
+      <link href="/movies/index.html"/>
+      <url>/movies/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p style="text-align:center; font-size:1.5em;">  【蝴蝶效应】</p><p style="text-align:center; font-size:1.5em;">  【美丽人生】</p><p style="text-align:center; font-size:1.5em;">  【超脱】</p><p style="text-align:center; font-size:1.5em;">  【波西米亚狂想曲】</p><p style="text-align:center; font-size:1.5em;">  【烟花】</p><p style="text-align:center; font-size:1.5em;">  【菊次郎的夏天】</p><p style="text-align:center; font-size:1.5em;">  【被嫌弃的松子的一生】</p><p style="text-align:center; font-size:1.5em;">  【唐伯虎点秋香】</p><p style="text-align:center; font-size:1.5em;">  【霸王别姬】</p><p style="text-align:center; font-size:1.5em;">  【落叶归根】</p><p style="text-align:center; font-size:1.5em;">  【南京照相馆】</p><p style="text-align:center; font-size:1.5em;">  【酷爱电影的庞波小姐】</p><p style="text-align:center; font-size:1.5em;">  【大话西游之仙履奇缘】</p><p style="text-align:center; font-size:1.5em;">  【复仇者联盟4：终局之战】</p><p style="text-align:center; font-size:1.5em;">  【孤注一掷】</p><p style="text-align:center; font-size:1.5em;">  【茶馆】</p><p style="text-align:center; font-size:1.5em;">  【我不是药神】</p><p style="text-align:center; font-size:1.5em;">  【钢铁侠】</p><p style="text-align:center; font-size:1.5em;">  【爱在黎明破晓前】</p><p style="text-align:center; font-size:1.5em;">  【你的名字。】</p><p style="text-align:center; font-size:1.5em;">  【情书】</p><p style="text-align:center; font-size:1.5em;">  【花束般的恋爱】</p>]]></content>
       
     </entry>
     
