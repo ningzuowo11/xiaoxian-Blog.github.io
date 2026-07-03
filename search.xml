@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>终端环境</title>
+      <link href="/2026/07/03/%E7%82%92/%E5%86%85%E5%AE%B9%E5%88%B7%E6%96%B0/"/>
+      <url>/2026/07/03/%E7%82%92/%E5%86%85%E5%AE%B9%E5%88%B7%E6%96%B0/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="出现的问题【一】"><a href="#出现的问题【一】" class="headerlink" title="出现的问题【一】"></a>出现的问题【一】</h2><p>为什么 source ~&#x2F;.profile 之前 Claude 用不了？<br>因为你跟 Linux01 的 SSH 会话是一个已经打开的终端窗口。<br>你想想流程：<br>我把代理配置写进了 ~&#x2F;.profile 文件（存在硬盘上）<br>但当前这个 SSH 终端窗口在启动时已经加载了旧的环境变量（那时候 ~&#x2F;.profile 里还没有代理）<br>文件改了，但当前终端内存里的变量没变 —— 它不知道文件被改了<br>所以你在这个窗口里跑 Claude Code，http_proxy 根本没被设置，当然连不上<br>source ~&#x2F;.profile 的作用就是告诉当前终端：” 别看内存里的旧值了，重新读一遍 ~&#x2F;.profile 文件，把新的代理变量加载进来 “。<br>以后记住一条简单的规律：<br>新开的终端窗口 &#x2F; 新 SSH 连接 → 自动读 ~&#x2F;.profile，代理自动生效<br>已经开着的终端 → 修改了 ~&#x2F;.profile 后需要手动 source ~&#x2F;.profile</p><h2 id="出现的问题【二】"><a href="#出现的问题【二】" class="headerlink" title="出现的问题【二】"></a>出现的问题【二】</h2><p>frpc 是 systemd 守护进程，它的网络连接是独立的，不受你终端里 export 的环境变量影响。<br>frpc 在系统启动时就跑起来了，它走的是物理网卡直连 Linux02:7000，跟 xray 代理是两个完全独立的服务<br>export 的环境变量只影响当前终端里新启动的进程—— 你现在 SSH 进 Linux01，在里面 source ~&#x2F;.profile，这设置的是你当前这个终端会话的环境变量。但 frpc 进程早就跑着，根本不管你终端里设了啥<br>xray 只监听 127.0.0.1，它不干预系统网络层，frpc 走的网络路径跟 xray 没有交集<br>所以即使你在终端里开了全局代理（xray 停掉了），frp 隧道也不受影响 ——frpc 根本不经过 127.0.0.1:10808，它直连 Linux02。<br>一个更直观的理解：<br>你从外网 ssh -o Port&#x3D;2222 <a href="mailto:&#x78;&#105;&#97;&#111;&#120;&#105;&#97;&#110;&#64;&#x31;&#x32;&#x31;&#x2e;&#56;&#57;&#x2e;&#57;&#52;&#46;&#49;&#56;&#x39;">&#x78;&#105;&#97;&#111;&#120;&#105;&#97;&#110;&#64;&#x31;&#x32;&#x31;&#x2e;&#56;&#57;&#x2e;&#57;&#52;&#46;&#49;&#56;&#x39;</a> 这个连接，流量路径是：<br>你的电脑 → 互联网 → Linux02(公网) → frp隧道 → Linux01:22</p><h1 id="常用代码"><a href="#常用代码" class="headerlink" title="常用代码"></a>常用代码</h1><p>状态查看</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status xray          # 看运行状态</span><br><span class="line">sudo journalctl -u xray -n 20       # 看最近20条日志</span><br><span class="line">curl -s ipinfo.io/ip                # 看当前出口IP（确认代理生效）</span><br></pre></td></tr></table></figure><p>启停控制</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start xray           # 启动</span><br><span class="line">sudo systemctl stop xray            # 停止</span><br><span class="line">sudo systemctl restart xray         # 重启</span><br></pre></td></tr></table></figure><p>切换配置（香港 ↔ 美国）</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">## 切到香港</span><br><span class="line">sudo systemctl stop xray</span><br><span class="line">sudo cp /opt/xray/config.json /opt/xray/config.us.json.bak</span><br><span class="line">sudo cp /opt/xray/config-hk.json /opt/xray/config.json</span><br><span class="line">sudo systemctl start xray</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">## 切回美国</span><br><span class="line">sudo systemctl stop xray</span><br><span class="line">sudo mv /opt/xray/config.us.json.bak /opt/xray/config.json</span><br><span class="line">sudo systemctl start xray</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 炒 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 日常 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title></title>
       <link href="/2026/07/02/%E7%82%92/%E9%98%B2%E6%AD%A2linux%E7%9B%92%E7%9B%96%E4%BC%91%E7%9C%A0/"/>
       <url>/2026/07/02/%E7%82%92/%E9%98%B2%E6%AD%A2linux%E7%9B%92%E7%9B%96%E4%BC%91%E7%9C%A0/</url>
@@ -442,31 +467,6 @@
     
     
     <entry>
-      <title>2025年末总结</title>
-      <link href="/2025/12/31/%E9%A5%AD/%E5%B9%B4%E6%9C%AB%E6%80%BB%E7%BB%93/"/>
-      <url>/2025/12/31/%E9%A5%AD/%E5%B9%B4%E6%9C%AB%E6%80%BB%E7%BB%93/</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="年度碎记"><a href="#年度碎记" class="headerlink" title="年度碎记"></a>年度碎记</h1><p>今年的跨度相当之大，上半年还在哐哐刷卷子，下半年就可以休闲的码字了。<br>小欢喜因谁？小立恨因誰？</p><h2 id="一、今年的收获"><a href="#一、今年的收获" class="headerlink" title="一、今年的收获"></a>一、今年的收获</h2><p>先说说今年的收获：</p><ul><li>技术层面：学会搭建VPN、配置外国网络环境，摸索出一些保护个人隐私的骚操作；也学会用docker部署各类好玩的项目，生活体验大大提升（但有时候配置失败真的超难受）；</li><li>忍不住吐槽云存储：同样是基于Linux编写的内容，在我的Ubuntu上能正常运行，到你这儿就不行了，太难了；</li><li>生活体验：下半年到处跑，掌握了除飞机外各类交通工具的乘坐方式（下次一定要坐一次飞机！！！）；更特别的是，用自行车替代了高中的步行出行，方便太多——既能随处逛逛、见识不同风景，还能锻炼身体（今年体测1000m跑了3分35秒，比初中快20多秒）；</li><li>技能突破：秉持“多会一门语言多一条路”的想法，下半年开始学生活中接触第三多的日语，不出所望，12月成功通过N5考试，而且中日合资好像也不错。</li><li>学业节点：6月份顺利毕业，收获了一张毕业证、一张毕业照。</li></ul><h2 id="二、今年的遗憾"><a href="#二、今年的遗憾" class="headerlink" title="二、今年的遗憾"></a>二、今年的遗憾</h2><p>心字已成灰。</p><ul><li>学业投入：下半年没在必修课上多花精力，成绩估计只能勉勉强强；</li><li>自我成长：没能深耕自己真正热爱的事，也没做好校园碎片时间的利用，很是遗憾；</li><li>升学结果：没能考上心仪的大学、心仪的专业——明明我是可以考上的啊；</li></ul><p>我总觉得，这些遗憾归根结底都是自己能力不足造成的。</p><h2 id="三、新年自勉"><a href="#三、新年自勉" class="headerlink" title="三、新年自勉"></a>三、新年自勉</h2><p>新的一年，送给自己一句话：</p><blockquote><p>无人扶我青云志，我自踏雪至山巅。</p></blockquote>]]></content>
-      
-      
-      <categories>
-          
-          <category> 蛋 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 年度报告 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>好用的刷课项目</title>
       <link href="/2025/12/31/%E7%82%92/%E5%A5%BD%E7%94%A8%E7%9A%84%E5%88%B7%E8%AF%BE%E9%A1%B9%E7%9B%AE/"/>
       <url>/2025/12/31/%E7%82%92/%E5%A5%BD%E7%94%A8%E7%9A%84%E5%88%B7%E8%AF%BE%E9%A1%B9%E7%9B%AE/</url>
@@ -492,23 +492,23 @@
     
     
     <entry>
-      <title>今年的主题词是:Time</title>
-      <link href="/2025/12/29/%E9%A5%AD/2025%E5%B9%B4%E4%B8%BB%E9%A2%98%E8%AF%8D/"/>
-      <url>/2025/12/29/%E9%A5%AD/2025%E5%B9%B4%E4%B8%BB%E9%A2%98%E8%AF%8D/</url>
+      <title>2025年末总结</title>
+      <link href="/2025/12/31/%E9%A5%AD/%E5%B9%B4%E6%9C%AB%E6%80%BB%E7%BB%93/"/>
+      <url>/2025/12/31/%E9%A5%AD/%E5%B9%B4%E6%9C%AB%E6%80%BB%E7%BB%93/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>今年是一个特殊的一年，有很多特殊的时间节点，高考，填志愿矛盾，矛盾后的思考，第一次一个人出远门，绝交，大学开学，大学人情等等，俗话说往事皆风尘，但是真的如此吗？过去的伤口就不会结巴了吗？于是最近我总结了我关于“时间”的思考，我慢慢来说，首先，我发现时间是个可恶的家伙，它冲淡了我的激情，它冲淡了我的热情，它唯独没有带走我的痛苦，”痛苦”就像白衬衫上的污渍，虽然影响不大，但是我看着是真膈应。接着，时间，时间，它是一个间隔，而不是一个时刻，它不是一个节点，我们应该把它拉长了看，我觉得±10年刚刚好，有人会说，过去都过去了，未来任未知之类的话，这不明显害人的话吗？过去的事情是自己最好的经验，一个人这辈子能有多少次增加经验的机会，毛主席曾说过，现在的困难只是提前让我们遇见未来的困难，我也是这么想的，人非圣贤。我承认未来是未知的，我感觉人生就像在时间的海洋里取水，我们不应该让自己滴水不漏，而是让自己漏的少一点，那该怎么办呢？你可以在当下抓住紧紧自己的已知，你的热爱，你的个性，你的亲友，你更可以壮大自己的手掌，让自己看似滴水不漏。当下，我想对自己说的就是，坚持梦想，远离废物，保持个性，拓宽眼界。</p>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="年度碎记"><a href="#年度碎记" class="headerlink" title="年度碎记"></a>年度碎记</h1><p>今年的跨度相当之大，上半年还在哐哐刷卷子，下半年就可以休闲的码字了。<br>小欢喜因谁？小立恨因誰？</p><h2 id="一、今年的收获"><a href="#一、今年的收获" class="headerlink" title="一、今年的收获"></a>一、今年的收获</h2><p>先说说今年的收获：</p><ul><li>技术层面：学会搭建VPN、配置外国网络环境，摸索出一些保护个人隐私的骚操作；也学会用docker部署各类好玩的项目，生活体验大大提升（但有时候配置失败真的超难受）；</li><li>忍不住吐槽云存储：同样是基于Linux编写的内容，在我的Ubuntu上能正常运行，到你这儿就不行了，太难了；</li><li>生活体验：下半年到处跑，掌握了除飞机外各类交通工具的乘坐方式（下次一定要坐一次飞机！！！）；更特别的是，用自行车替代了高中的步行出行，方便太多——既能随处逛逛、见识不同风景，还能锻炼身体（今年体测1000m跑了3分35秒，比初中快20多秒）；</li><li>技能突破：秉持“多会一门语言多一条路”的想法，下半年开始学生活中接触第三多的日语，不出所望，12月成功通过N5考试，而且中日合资好像也不错。</li><li>学业节点：6月份顺利毕业，收获了一张毕业证、一张毕业照。</li></ul><h2 id="二、今年的遗憾"><a href="#二、今年的遗憾" class="headerlink" title="二、今年的遗憾"></a>二、今年的遗憾</h2><p>心字已成灰。</p><ul><li>学业投入：下半年没在必修课上多花精力，成绩估计只能勉勉强强；</li><li>自我成长：没能深耕自己真正热爱的事，也没做好校园碎片时间的利用，很是遗憾；</li><li>升学结果：没能考上心仪的大学、心仪的专业——明明我是可以考上的啊；</li></ul><p>我总觉得，这些遗憾归根结底都是自己能力不足造成的。</p><h2 id="三、新年自勉"><a href="#三、新年自勉" class="headerlink" title="三、新年自勉"></a>三、新年自勉</h2><p>新的一年，送给自己一句话：</p><blockquote><p>无人扶我青云志，我自踏雪至山巅。</p></blockquote>]]></content>
       
       
       <categories>
           
-          <category> 饭 </category>
+          <category> 蛋 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 2025 </tag>
+            <tag> 年度报告 </tag>
             
         </tags>
       
@@ -534,6 +534,31 @@
         <tags>
             
             <tag> 考试 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>今年的主题词是:Time</title>
+      <link href="/2025/12/29/%E9%A5%AD/2025%E5%B9%B4%E4%B8%BB%E9%A2%98%E8%AF%8D/"/>
+      <url>/2025/12/29/%E9%A5%AD/2025%E5%B9%B4%E4%B8%BB%E9%A2%98%E8%AF%8D/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>今年是一个特殊的一年，有很多特殊的时间节点，高考，填志愿矛盾，矛盾后的思考，第一次一个人出远门，绝交，大学开学，大学人情等等，俗话说往事皆风尘，但是真的如此吗？过去的伤口就不会结巴了吗？于是最近我总结了我关于“时间”的思考，我慢慢来说，首先，我发现时间是个可恶的家伙，它冲淡了我的激情，它冲淡了我的热情，它唯独没有带走我的痛苦，”痛苦”就像白衬衫上的污渍，虽然影响不大，但是我看着是真膈应。接着，时间，时间，它是一个间隔，而不是一个时刻，它不是一个节点，我们应该把它拉长了看，我觉得±10年刚刚好，有人会说，过去都过去了，未来任未知之类的话，这不明显害人的话吗？过去的事情是自己最好的经验，一个人这辈子能有多少次增加经验的机会，毛主席曾说过，现在的困难只是提前让我们遇见未来的困难，我也是这么想的，人非圣贤。我承认未来是未知的，我感觉人生就像在时间的海洋里取水，我们不应该让自己滴水不漏，而是让自己漏的少一点，那该怎么办呢？你可以在当下抓住紧紧自己的已知，你的热爱，你的个性，你的亲友，你更可以壮大自己的手掌，让自己看似滴水不漏。当下，我想对自己说的就是，坚持梦想，远离废物，保持个性，拓宽眼界。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 饭 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 2025 </tag>
             
         </tags>
       
@@ -942,11 +967,11 @@
     
     
     <entry>
-      <title>docker小问题</title>
-      <link href="/2025/09/02/%E7%82%92/docker/"/>
-      <url>/2025/09/02/%E7%82%92/docker/</url>
+      <title>Ubuntu24.10安装gitlab18.4</title>
+      <link href="/2025/09/02/%E7%82%92/Ubuntu24.10%E5%AE%89%E8%A3%85gitlab/"/>
+      <url>/2025/09/02/%E7%82%92/Ubuntu24.10%E5%AE%89%E8%A3%85gitlab/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>1，一定要避免软件源重复配置<br><br>2，及时更新密钥<br><br>查看密钥状况<br><br>sudo apt-key list<br><br>导出并迁移 Docker CE 密钥<br>sudo apt-key export 密钥后8位 | sudo gpg –dearmour -o &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.d&#x2F;docker-ce-archive.gpg<br><br>备份并删除旧的密钥环文件：<br><br>sudo mv &#x2F;etc&#x2F;apt&#x2F;trusted.gpg &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.backup</p>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>官网:<a href="https://gitlab.com/">https://gitlab.com</a></p><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  启用SSH并打开防火墙端口</div><p>1,安装基本依赖包：<br><br>sudo apt update<br><br>sudo apt install -y curl openssh-server ca-certificates tzdata perl<br><br>2，启用并启动 OpenSSH 服务器守护进程：<br><br>sudo systemctl enable –now ssh<br><br>3，安装后，打开防火墙端口<br><br>sudo ufw allow 22&#x2F;tcp<br><br>sudo ufw allow 80&#x2F;tcp<br><br>sudo ufw allow 443&#x2F;tcp<br><br>sudo ufw enable</p><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  添加GitLab包存储库</div>1，安装所需软件包<br>sudo apt install -y curl<br>2，添加 GitLab 存储库<br>curl "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh" | sudo bash<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  安装命令</div>sudo apt install gitlab-ee或者手动下载（安装包可以在以下网址找到）：https://packages.gitlab.com/gitlab/gitlab-ee]]></content>
       
       
       <categories>
@@ -967,11 +992,11 @@
     
     
     <entry>
-      <title>Ubuntu24.10安装gitlab18.4</title>
-      <link href="/2025/09/02/%E7%82%92/Ubuntu24.10%E5%AE%89%E8%A3%85gitlab/"/>
-      <url>/2025/09/02/%E7%82%92/Ubuntu24.10%E5%AE%89%E8%A3%85gitlab/</url>
+      <title>docker小问题</title>
+      <link href="/2025/09/02/%E7%82%92/docker/"/>
+      <url>/2025/09/02/%E7%82%92/docker/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>官网:<a href="https://gitlab.com/">https://gitlab.com</a></p><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  启用SSH并打开防火墙端口</div><p>1,安装基本依赖包：<br><br>sudo apt update<br><br>sudo apt install -y curl openssh-server ca-certificates tzdata perl<br><br>2，启用并启动 OpenSSH 服务器守护进程：<br><br>sudo systemctl enable –now ssh<br><br>3，安装后，打开防火墙端口<br><br>sudo ufw allow 22&#x2F;tcp<br><br>sudo ufw allow 80&#x2F;tcp<br><br>sudo ufw allow 443&#x2F;tcp<br><br>sudo ufw enable</p><div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  添加GitLab包存储库</div>1，安装所需软件包<br>sudo apt install -y curl<br>2，添加 GitLab 存储库<br>curl "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh" | sudo bash<div style="  text-align:center;  font-size:2rem;  color: #000000ff;  text-shadow: 4px 4px 4px rgba(0,0,0,0.3);">  安装命令</div>sudo apt install gitlab-ee或者手动下载（安装包可以在以下网址找到）：https://packages.gitlab.com/gitlab/gitlab-ee]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>1，一定要避免软件源重复配置<br><br>2，及时更新密钥<br><br>查看密钥状况<br><br>sudo apt-key list<br><br>导出并迁移 Docker CE 密钥<br>sudo apt-key export 密钥后8位 | sudo gpg –dearmour -o &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.d&#x2F;docker-ce-archive.gpg<br><br>备份并删除旧的密钥环文件：<br><br>sudo mv &#x2F;etc&#x2F;apt&#x2F;trusted.gpg &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.backup</p>]]></content>
       
       
       <categories>
@@ -1415,39 +1440,14 @@
     </entry>
     
     
-    
-    <entry>
-      <title>终端环境</title>
-      <link href="/2025/07/03/%E7%82%92/%E5%86%85%E5%AE%B9%E5%88%B7%E6%96%B0/"/>
-      <url>/2025/07/03/%E7%82%92/%E5%86%85%E5%AE%B9%E5%88%B7%E6%96%B0/</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="出现的问题【一】"><a href="#出现的问题【一】" class="headerlink" title="出现的问题【一】"></a>出现的问题【一】</h2><p>为什么 source ~&#x2F;.profile 之前 Claude 用不了？<br>因为你跟 Linux01 的 SSH 会话是一个已经打开的终端窗口。<br>你想想流程：<br>我把代理配置写进了 ~&#x2F;.profile 文件（存在硬盘上）<br>但当前这个 SSH 终端窗口在启动时已经加载了旧的环境变量（那时候 ~&#x2F;.profile 里还没有代理）<br>文件改了，但当前终端内存里的变量没变 —— 它不知道文件被改了<br>所以你在这个窗口里跑 Claude Code，http_proxy 根本没被设置，当然连不上<br>source ~&#x2F;.profile 的作用就是告诉当前终端：” 别看内存里的旧值了，重新读一遍 ~&#x2F;.profile 文件，把新的代理变量加载进来 “。<br>以后记住一条简单的规律：<br>新开的终端窗口 &#x2F; 新 SSH 连接 → 自动读 ~&#x2F;.profile，代理自动生效<br>已经开着的终端 → 修改了 ~&#x2F;.profile 后需要手动 source ~&#x2F;.profile</p><h2 id="出现的问题【二】"><a href="#出现的问题【二】" class="headerlink" title="出现的问题【二】"></a>出现的问题【二】</h2><p>frpc 是 systemd 守护进程，它的网络连接是独立的，不受你终端里 export 的环境变量影响。<br>frpc 在系统启动时就跑起来了，它走的是物理网卡直连 Linux02:7000，跟 xray 代理是两个完全独立的服务<br>export 的环境变量只影响当前终端里新启动的进程—— 你现在 SSH 进 Linux01，在里面 source ~&#x2F;.profile，这设置的是你当前这个终端会话的环境变量。但 frpc 进程早就跑着，根本不管你终端里设了啥<br>xray 只监听 127.0.0.1，它不干预系统网络层，frpc 走的网络路径跟 xray 没有交集<br>所以即使你在终端里开了全局代理（xray 停掉了），frp 隧道也不受影响 ——frpc 根本不经过 127.0.0.1:10808，它直连 Linux02。<br>一个更直观的理解：<br>你从外网 ssh -o Port&#x3D;2222 <a href="mailto:&#x78;&#105;&#97;&#x6f;&#x78;&#x69;&#x61;&#110;&#64;&#x31;&#x32;&#49;&#x2e;&#56;&#57;&#x2e;&#x39;&#x34;&#46;&#x31;&#x38;&#x39;">&#x78;&#105;&#97;&#x6f;&#x78;&#x69;&#x61;&#110;&#64;&#x31;&#x32;&#49;&#x2e;&#56;&#57;&#x2e;&#x39;&#x34;&#46;&#x31;&#x38;&#x39;</a> 这个连接，流量路径是：<br>你的电脑 → 互联网 → Linux02(公网) → frp隧道 → Linux01:22</p><h1 id="常用代码"><a href="#常用代码" class="headerlink" title="常用代码"></a>常用代码</h1><p>状态查看</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status xray          # 看运行状态</span><br><span class="line">sudo journalctl -u xray -n 20       # 看最近20条日志</span><br><span class="line">curl -s ipinfo.io/ip                # 看当前出口IP（确认代理生效）</span><br></pre></td></tr></table></figure><p>启停控制</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start xray           # 启动</span><br><span class="line">sudo systemctl stop xray            # 停止</span><br><span class="line">sudo systemctl restart xray         # 重启</span><br></pre></td></tr></table></figure><p>切换配置（香港 ↔ 美国）</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">## 切到香港</span><br><span class="line">sudo systemctl stop xray</span><br><span class="line">sudo cp /opt/xray/config.json /opt/xray/config.us.json.bak</span><br><span class="line">sudo cp /opt/xray/config-hk.json /opt/xray/config.json</span><br><span class="line">sudo systemctl start xray</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">## 切回美国</span><br><span class="line">sudo systemctl stop xray</span><br><span class="line">sudo mv /opt/xray/config.us.json.bak /opt/xray/config.json</span><br><span class="line">sudo systemctl start xray</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> 炒 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 日常 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
   
   
     
     
     <entry>
-      <title>归档</title>
-      <link href="/archives/index.html"/>
-      <url>/archives/index.html</url>
+      <title>link</title>
+      <link href="/link/index.html"/>
+      <url>/link/index.html</url>
       
         <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
@@ -1467,31 +1467,9 @@
     
     
     <entry>
-      <title></title>
-      <link href="/js/universe.css"/>
-      <url>/js/universe.css</url>
-      
-        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>comments</title>
-      <link href="/comments/index.html"/>
-      <url>/comments/index.html</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!-- GitCalendar容器 --><div id="gitZone"></div>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>link</title>
-      <link href="/link/index.html"/>
-      <url>/link/index.html</url>
+      <title>归档</title>
+      <link href="/archives/index.html"/>
+      <url>/archives/index.html</url>
       
         <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
@@ -1511,6 +1489,28 @@
     
     
     <entry>
+      <title>comments</title>
+      <link href="/comments/index.html"/>
+      <url>/comments/index.html</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!-- GitCalendar容器 --><div id="gitZone"></div>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title></title>
+      <link href="/js/universe.css"/>
+      <url>/js/universe.css</url>
+      
+        <content type="html"><![CDATA[/* 背景宇宙星光  */#universe{  display: block;  position: fixed;  margin: 0;  padding: 0;  border: 0;  outline: 0;  left: 0;  top: 0;  width: 100%;  height: 100%;  pointer-events: none;  /* 这个是调置顶的优先级的，-1在文章页下面，背景上面，个人推荐这种 */  z-index: -1;}]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>电影</title>
       <link href="/movies/index.html"/>
       <url>/movies/index.html</url>
@@ -1522,22 +1522,22 @@
     
     
     <entry>
-      <title>tags</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title></title>
+      <link href="/css/custom.css"/>
+      <url>/css/custom.css</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
+        <content type="html"><![CDATA[/* ========== 全局毛玻璃效果 ========== */:root {  --card-bg: rgba(255, 255, 255, 0.3) !important;  --card-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;  --card-hover-box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12) !important;}[data-theme="dark"] {  --card-bg: rgba(30, 30, 30, 0.4) !important;  --card-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;  --card-hover-box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;}.cardHover,.layout > div:first-child:not(.nc),#recent-posts .recent-post-item,#aside-content .card-widget,.layout .pagination > *:not(.space) {  -webkit-backdrop-filter: blur(20px) saturate(180%);  backdrop-filter: blur(20px) saturate(180%);  border-radius: 16px !important;  border: 1px solid rgba(255, 255, 255, 0.4) !important;}[data-theme="dark"] .cardHover,[data-theme="dark"] .layout > div:first-child:not(.nc),[data-theme="dark"] #recent-posts .recent-post-item,[data-theme="dark"] #aside-content .card-widget,[data-theme="dark"] .layout .pagination > *:not(.space) {  border-color: rgba(255, 255, 255, 0.08) !important;}/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 侧边栏个人信息卡片 - 毛玻璃效果 */#aside-content > .card-widget.card-info {  background: rgba(255, 255, 255, 0.3) !important;  -webkit-backdrop-filter: blur(20px) saturate(180%);  backdrop-filter: blur(20px) saturate(180%);  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;  border: 1px solid rgba(255, 255, 255, 0.4) !important;}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: rgba(30, 30, 30, 0.4) !important;  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;  border-color: rgba(255, 255, 255, 0.08) !important;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}/* ========== 分类页美化 ========== */.category-lists {  padding: 10px 0;}.category-lists .category-list {  display: grid;  grid-template-columns: repeat(3, 1fr);  gap: 20px;  padding: 0 !important;  list-style: none !important;}.category-lists .category-list-item {  position: relative !important;  margin: 0 !important;  padding: 0 !important;  border-radius: 16px;  overflow: hidden;  background: var(--card-bg);  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);  border: 1px solid rgba(0, 0, 0, 0.04);  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);  list-style: none !important;}.category-lists .category-list-item::before {  display: none !important;}.category-lists .category-list-item:hover {  transform: translateY(-6px);  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);}.category-lists .category-list-item a.category-list-link {  display: flex;  flex-direction: column;  align-items: center;  justify-content: center;  padding: 36px 20px 28px;  text-decoration: none !important;  color: var(--font-color) !important;  gap: 12px;  position: relative;}.category-lists .category-list-item .category-list-link::before {  display: none !important;}.category-lists .category-list-item .category-icon {  font-size: 2.4em;  opacity: 0.7;  transition: all 0.35s ease;  margin-bottom: 8px;}.category-lists .category-list-item:nth-child(1) .category-icon {  color: #e74c3c;}.category-lists .category-list-item:nth-child(2) .category-icon {  color: #f39c12;}.category-lists .category-list-item:nth-child(3) .category-icon {  color: #3498db;}.category-lists .category-list-item:hover .category-icon {  transform: scale(1.15);  opacity: 1;}.category-lists .category-list-link {  font-size: 1.25em;  font-weight: 600;  letter-spacing: 0.5px;}.category-lists .category-list-count {  position: absolute;  bottom: 16px;  right: 16px;  background: linear-gradient(135deg, #ff6b6b 0%, #ffa07a 100%);  color: #fff !important;  font-size: 0.75em;  font-weight: 700;  min-width: 24px;  height: 24px;  line-height: 24px;  text-align: center;  border-radius: 12px;  padding: 0 8px;  margin-left: 0 !important;  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);}.category-lists .category-list-item:nth-child(1) .category-list-count {  background: linear-gradient(135deg, #e74c3c 0%, #ff6b6b 100%);  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);}.category-lists .category-list-item:nth-child(2) .category-list-count {  background: linear-gradient(135deg, #f39c12 0%, #ffd93d 100%);  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);}.category-lists .category-list-item:nth-child(3) .category-list-count {  background: linear-gradient(135deg, #3498db 0%, #6bb5ff 100%);  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);}.category-lists .category-list-item:hover .category-list-count {  transform: scale(1.1);  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);}.category-lists .category-list-count::before,.category-lists .category-list-count::after {  content: '' !important;}/* 分类页响应式 */@media screen and (max-width: 768px) {  .category-lists .category-list {    grid-template-columns: repeat(2, 1fr);    gap: 14px;  }  .category-lists .category-list-item a.category-list-link {    padding: 28px 16px 22px;  }}@media screen and (max-width: 480px) {  .category-lists .category-list {    grid-template-columns: 1fr;    gap: 12px;  }}/* 夜间模式适配 */[data-theme="dark"] .category-lists .category-list-count {  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);}[data-theme="dark"] .category-lists .category-list-item:nth-child(1) .category-list-count {  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.2);}[data-theme="dark"] .category-lists .category-list-item:nth-child(2) .category-list-count {  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.2);}[data-theme="dark"] .category-lists .category-list-item:nth-child(3) .category-list-count {  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);}[data-theme="dark"] .category-lists .category-list-item:hover .category-list-count {  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);}[data-theme="dark"] .category-lists .category-list-item {  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);  border-color: rgba(255, 255, 255, 0.06);}[data-theme="dark"] .category-lists .category-list-item:hover {  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);}/* 404页面隐藏分类卡片 */.type-404 #categoryBar,.type-404 .categoryBar-list {  display: none !important;}/* 首页分类卡片图标样式 */.categorybar-icon {  font-size: 1.6em;  opacity: 0.85;  margin-right: 6px;  vertical-align: middle;  transition: all 0.35s ease;}.categoryBar-list-item:nth-child(1) .categorybar-icon {  color: #e74c3c;}.categoryBar-list-item:nth-child(2) .categorybar-icon {  color: #f39c12;}.categoryBar-list-item:nth-child(3) .categorybar-icon {  color: #3498db;}.categoryBar-list-item:hover .categorybar-icon {  transform: scale(1.2);  opacity: 1;}/* 暗夜模式代码块背景透明 */[data-theme="dark"] {  --hl-bg: transparent !important;  --hltools-bg: rgba(255, 255, 255, 0.05) !important;}[data-theme="dark"] .read-mode {  --highlight-bg: transparent !important;}[data-theme="dark"] figure.highlight,[data-theme="dark"] pre,[data-theme="dark"] .code-container,[data-theme="dark"] #article-container figure.highlight,[data-theme="dark"] #article-container pre,[data-theme="dark"] #article-container .code-container,[data-theme="dark"] .container figure.highlight,[data-theme="dark"] .container pre,[data-theme="dark"] .container pre > code,[data-theme="dark"] .container code {  background: transparent !important;}[data-theme="dark"] figure.highlight::before,[data-theme="dark"] pre::before,[data-theme="dark"] #article-container figure.highlight::before,[data-theme="dark"] #article-container pre::before {  background: transparent !important;}[data-theme="dark"] .highlight-tools {  background: rgba(255, 255, 255, 0.05) !important;}[data-theme="dark"] figure.highlight {  border: 1px solid rgba(255, 255, 255, 0.1) !important;}[data-theme="dark"] .read-mode .container pre,[data-theme="dark"] .read-mode .container .highlight,[data-theme="dark"] .read-mode .container figure.highlight .hljs,[data-theme="dark"] .read-mode figure.highlight,[data-theme="dark"] .read-mode pre,[data-theme="dark"] .read-mode code {  background: transparent !important;}/* ========== 首页自定义排版 ========== */.recent-posts .homepage-header {  display: flex;  justify-content: space-between;  align-items: center;  margin-bottom: 32px;  padding-bottom: 16px;  border-bottom: 2px solid rgba(0, 0, 0, 0.06);}.homepage-title {  font-size: 26px;  font-weight: 700;  color: var(--font-color);  position: relative;  margin: 0;  padding-left: 14px;}.homepage-title::before {  content: '';  position: absolute;  left: 0;  top: 50%;  transform: translateY(-50%);  width: 4px;  height: 24px;  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);  border-radius: 2px;}.view-all-link {  color: #333;  text-decoration: none;  font-size: 14px;  transition: all 0.3s;  display: flex;  align-items: center;  gap: 4px;}.view-all-link:hover {  color: #667eea;}/* 文章卡片网格 */.article-grid {  display: grid;  grid-template-columns: repeat(3, 1fr);  gap: 24px;  margin-bottom: 40px;}@media (max-width: 1024px) {  .article-grid {    grid-template-columns: repeat(2, 1fr);  }}@media (max-width: 768px) {  .article-grid {    grid-template-columns: 1fr;  }}/* 文章卡片 */.article-card {  background: var(--card-bg);  border-radius: 16px;  overflow: hidden;  box-shadow: var(--card-box-shadow);  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);  cursor: pointer;  border: 1px solid rgba(255, 255, 255, 0.4);  -webkit-backdrop-filter: blur(20px) saturate(180%);  backdrop-filter: blur(20px) saturate(180%);}.article-card:hover {  transform: translateY(-8px);  box-shadow: var(--card-hover-box-shadow);}.article-cover {  width: 100%;  height: 200px;  overflow: hidden;  position: relative;}.article-cover img,.article-cover a img {  width: 100%;  height: 100%;  object-fit: cover;  transition: transform 0.4s ease;}.article-card:hover .article-cover img {  transform: scale(1.08);}.article-content {  padding: 20px;}.article-content .article-title {  font-size: 17px;  font-weight: 600;  color: var(--font-color);  margin: 0 0 10px 0;  line-height: 1.5;  display: -webkit-box;  -webkit-line-clamp: 2;  -webkit-box-orient: vertical;  overflow: hidden;}.article-content .article-title a {  color: inherit;  text-decoration: none;}.article-content .article-title .sticky {  color: #e74c3c;  margin-right: 6px;  font-size: 14px;}.article-content .article-description {  font-size: 13px;  color: #888;  line-height: 1.7;  margin: 0 0 16px 0;  display: -webkit-box;  -webkit-line-clamp: 2;  -webkit-box-orient: vertical;  overflow: hidden;}.article-content .article-meta {  display: flex;  gap: 16px;  font-size: 12px;  color: #aaa;  flex-wrap: wrap;}.article-content .meta-item {  display: flex;  align-items: center;  gap: 6px;}.article-content .meta-item i {  font-size: 12px;}.article-content .meta-item a {  color: inherit;  text-decoration: none;  transition: color 0.3s;}.article-content .meta-item a:hover {  color: #667eea;}/* 引言区域 - 独立圆角矩形卡片 */.quote-wrap {  margin-top: 8px;}.quote-section {  background: rgba(255, 255, 255, 0.3);  -webkit-backdrop-filter: blur(20px) saturate(180%);  backdrop-filter: blur(20px) saturate(180%);  border-radius: 16px;  padding: 40px 52px;  position: relative;  overflow: hidden;  display: flex;  align-items: flex-start;  gap: 24px;  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);  border: 1px solid rgba(255, 255, 255, 0.4);}/* 根本解决：用 CSS Grid 替换首页 flex 布局 */#content-inner.layout:has(#recent-posts) {  display: grid !important;  grid-template-columns: 74% 1fr;  gap: 20px;  align-items: start;}/* 最新文章容器 */#content-inner.layout:has(#recent-posts) > #recent-posts {  grid-column: 1;  width: 100% !important;  transition: none !important;}/* 覆盖 Butterfly 原始 hide-aside 规则，避免闪烁 */html.hide-aside #content-inner.layout:has(#recent-posts) > #recent-posts {  width: 100% !important;  transition: none !important;}#content-inner.layout:has(#recent-posts) > .aside-content {  grid-column: 2;  grid-row: 1 / 4;  width: 100% !important;  transition: opacity 0.3s ease, transform 0.3s ease;  opacity: 1;  transform: translateX(0);}#content-inner.layout:has(#recent-posts) > .quote-wrap {  grid-column: 1;  grid-row: 2;  transition: margin 0.3s ease;}#content-inner.layout:has(#recent-posts) > #pagination {  grid-column: 1;  grid-row: 3;}/* 单栏模式（隐藏侧边栏）动画 */html.hide-aside #content-inner.layout:has(#recent-posts) {  grid-template-columns: 1fr !important;  justify-content: center !important;}html.hide-aside #content-inner.layout:has(#recent-posts) > .aside-content {  display: block !important;  opacity: 0 !important;  transform: translateX(30px) !important;  pointer-events: none;  position: absolute;  visibility: hidden;  width: 0 !important;  overflow: hidden;}html.hide-aside #content-inner.layout:has(#recent-posts) > #recent-posts,html.hide-aside #content-inner.layout:has(#recent-posts) > .quote-wrap {  width: auto;}@media screen and (max-width: 900px) {  #content-inner.layout:has(#recent-posts) {    display: flex !important;    flex-direction: column !important;  }  #content-inner.layout:has(#recent-posts) > #recent-posts,  #content-inner.layout:has(#recent-posts) > .aside-content,  #content-inner.layout:has(#recent-posts) > .quote-wrap {    width: 100% !important;  }}.quote-section::before {  content: '';  position: absolute;  right: 0;  top: 0;  width: 40%;  height: 100%;  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><path d="M50,180 Q100,20 150,100 Q200,180 250,50 Q300,120 350,30" fill="none" stroke="rgba(0,0,0,0.03)" stroke-width="3"/></svg>') no-repeat center;  background-size: cover;  pointer-events: none;}.quote-icon {  font-size: 42px;  color: rgba(0, 0, 0, 0.15);  flex-shrink: 0;  margin-top: 2px;}.quote-content {  position: relative;  z-index: 1;  flex: 1;}.quote-text {  font-size: 22px;  color: #333;  line-height: 1.8;  font-weight: 400;  margin: 0 0 14px 0;  letter-spacing: 1px;}.quote-author {  font-size: 16px;  color: #999;  margin: 0;  font-weight: 400;}/* 夜间模式适配 */[data-theme="dark"] .recent-posts .homepage-header {  border-bottom-color: rgba(255, 255, 255, 0.08);}[data-theme="dark"] .view-all-link {  color: #888;}[data-theme="dark"] .view-all-link:hover {  color: #667eea;}[data-theme="dark"] .article-card {  border-color: rgba(255, 255, 255, 0.08);}[data-theme="dark"] .article-content .article-description {  color: #888;}[data-theme="dark"] .article-content .article-meta {  color: #666;}[data-theme="dark"] .quote-section {  background: rgba(30, 30, 30, 0.4);  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);  border-color: rgba(255, 255, 255, 0.08);}[data-theme="dark"] .quote-icon {  color: rgba(255, 255, 255, 0.1);}[data-theme="dark"] .quote-icon {  color: rgba(102, 126, 234, 0.4);}[data-theme="dark"] .quote-text {  color: #ccc;}[data-theme="dark"] .quote-author {  color: #888;}/* 阅读模式下保留背景图片 */.read-mode #web_bg {  display: block !important;}body.read-mode {  background: transparent !important;}/* 暗色阅读模式下：去掉所有毛玻璃、圆角、边框、阴影，全部透明 */[data-theme="dark"] .read-mode .cardHover,[data-theme="dark"] .read-mode .layout > div:first-child:not(.nc),[data-theme="dark"] .read-mode #recent-posts .recent-post-item,[data-theme="dark"] .read-mode #aside-content .card-widget,[data-theme="dark"] .read-mode .layout .pagination > *:not(.space),[data-theme="dark"] .read-mode .article-card,[data-theme="dark"] .read-mode .quote-section,[data-theme="dark"] .read-mode #post,[data-theme="dark"] .read-mode #article-container,[data-theme="dark"] .read-mode .container {  -webkit-backdrop-filter: none !important;  backdrop-filter: none !important;  background: transparent !important;  background-color: transparent !important;  border: none !important;  box-shadow: none !important;  border-radius: 0 !important;}[data-theme="dark"] .read-mode figure.highlight,[data-theme="dark"] .read-mode pre,[data-theme="dark"] .read-mode code,[data-theme="dark"] .read-mode .highlight-tools,[data-theme="dark"] .read-mode .container pre,[data-theme="dark"] .read-mode .container code,[data-theme="dark"] .read-mode .container figure.highlight {  background: transparent !important;  background-color: transparent !important;  border: none !important;  box-shadow: none !important;  border-radius: 0 !important;}]]></content>
       
     </entry>
     
     
     
     <entry>
-      <title></title>
-      <link href="/css/custom.css"/>
-      <url>/css/custom.css</url>
+      <title>tags</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
       
-        <content type="html"><![CDATA[/* ========== 全局毛玻璃效果 ========== */:root {  --card-bg: rgba(255, 255, 255, 0.3) !important;  --card-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;  --card-hover-box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12) !important;}[data-theme="dark"] {  --card-bg: rgba(30, 30, 30, 0.4) !important;  --card-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;  --card-hover-box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;}.cardHover,.layout > div:first-child:not(.nc),#recent-posts .recent-post-item,#aside-content .card-widget,.layout .pagination > *:not(.space) {  -webkit-backdrop-filter: blur(20px) saturate(180%);  backdrop-filter: blur(20px) saturate(180%);  border-radius: 16px !important;  border: 1px solid rgba(255, 255, 255, 0.4) !important;}[data-theme="dark"] .cardHover,[data-theme="dark"] .layout > div:first-child:not(.nc),[data-theme="dark"] #recent-posts .recent-post-item,[data-theme="dark"] #aside-content .card-widget,[data-theme="dark"] .layout .pagination > *:not(.space) {  border-color: rgba(255, 255, 255, 0.08) !important;}/* 页脚与头图透明 */#footer {  background: transparent !important;}#page-header {  background: transparent !important;}/* 白天模式遮罩透明 */#footer::before {  background: transparent !important;}#page-header::before {  background: transparent !important;}/* 夜间模式遮罩透明 */[data-theme="dark"] #footer::before {  background: transparent !important;}[data-theme="dark"] #page-header::before {  background: transparent !important;}/* 翻页按钮居中 */#pagination {  width: 100%;  margin: auto;}/* 一级菜单居中 */#nav .menus_items {  position: absolute !important;  width: fit-content !important;  left: 50% !important;  transform: translateX(-50%) !important;}/* 子菜单横向展示 */#nav .menus_items .menus_item:hover .menus_item_child {  display: flex !important;}/* 这里的2是代表导航栏的第2个元素，即有子菜单的元素，可以按自己需求修改 */.menus_items .menus_item:nth-child(2) .menus_item_child {  left: -125px;}/* 侧边栏个人信息卡片 - 毛玻璃效果 */#aside-content > .card-widget.card-info {  background: rgba(255, 255, 255, 0.3) !important;  -webkit-backdrop-filter: blur(20px) saturate(180%);  backdrop-filter: blur(20px) saturate(180%);  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;  border: 1px solid rgba(255, 255, 255, 0.4) !important;}/* 黑夜模式适配 */[data-theme="dark"] #aside-content > .card-widget.card-info {  background: rgba(30, 30, 30, 0.4) !important;  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;  border-color: rgba(255, 255, 255, 0.08) !important;}/* 个人信息Follow me按钮 */#aside-content > .card-widget.card-info > #card-info-btn {  background-color: #3eb8be;  border-radius: 8px;}/* ========== 分类页美化 ========== */.category-lists {  padding: 10px 0;}.category-lists .category-list {  display: grid;  grid-template-columns: repeat(3, 1fr);  gap: 20px;  padding: 0 !important;  list-style: none !important;}.category-lists .category-list-item {  position: relative !important;  margin: 0 !important;  padding: 0 !important;  border-radius: 16px;  overflow: hidden;  background: var(--card-bg);  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);  border: 1px solid rgba(0, 0, 0, 0.04);  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);  list-style: none !important;}.category-lists .category-list-item::before {  display: none !important;}.category-lists .category-list-item:hover {  transform: translateY(-6px);  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);}.category-lists .category-list-item a.category-list-link {  display: flex;  flex-direction: column;  align-items: center;  justify-content: center;  padding: 36px 20px 28px;  text-decoration: none !important;  color: var(--font-color) !important;  gap: 12px;  position: relative;}.category-lists .category-list-item .category-list-link::before {  display: none !important;}.category-lists .category-list-item .category-icon {  font-size: 2.4em;  opacity: 0.7;  transition: all 0.35s ease;  margin-bottom: 8px;}.category-lists .category-list-item:nth-child(1) .category-icon {  color: #e74c3c;}.category-lists .category-list-item:nth-child(2) .category-icon {  color: #f39c12;}.category-lists .category-list-item:nth-child(3) .category-icon {  color: #3498db;}.category-lists .category-list-item:hover .category-icon {  transform: scale(1.15);  opacity: 1;}.category-lists .category-list-link {  font-size: 1.25em;  font-weight: 600;  letter-spacing: 0.5px;}.category-lists .category-list-count {  position: absolute;  bottom: 16px;  right: 16px;  background: linear-gradient(135deg, #ff6b6b 0%, #ffa07a 100%);  color: #fff !important;  font-size: 0.75em;  font-weight: 700;  min-width: 24px;  height: 24px;  line-height: 24px;  text-align: center;  border-radius: 12px;  padding: 0 8px;  margin-left: 0 !important;  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);}.category-lists .category-list-item:nth-child(1) .category-list-count {  background: linear-gradient(135deg, #e74c3c 0%, #ff6b6b 100%);  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);}.category-lists .category-list-item:nth-child(2) .category-list-count {  background: linear-gradient(135deg, #f39c12 0%, #ffd93d 100%);  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);}.category-lists .category-list-item:nth-child(3) .category-list-count {  background: linear-gradient(135deg, #3498db 0%, #6bb5ff 100%);  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);}.category-lists .category-list-item:hover .category-list-count {  transform: scale(1.1);  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);}.category-lists .category-list-count::before,.category-lists .category-list-count::after {  content: '' !important;}/* 分类页响应式 */@media screen and (max-width: 768px) {  .category-lists .category-list {    grid-template-columns: repeat(2, 1fr);    gap: 14px;  }  .category-lists .category-list-item a.category-list-link {    padding: 28px 16px 22px;  }}@media screen and (max-width: 480px) {  .category-lists .category-list {    grid-template-columns: 1fr;    gap: 12px;  }}/* 夜间模式适配 */[data-theme="dark"] .category-lists .category-list-count {  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);}[data-theme="dark"] .category-lists .category-list-item:nth-child(1) .category-list-count {  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.2);}[data-theme="dark"] .category-lists .category-list-item:nth-child(2) .category-list-count {  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.2);}[data-theme="dark"] .category-lists .category-list-item:nth-child(3) .category-list-count {  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);}[data-theme="dark"] .category-lists .category-list-item:hover .category-list-count {  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);}[data-theme="dark"] .category-lists .category-list-item {  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);  border-color: rgba(255, 255, 255, 0.06);}[data-theme="dark"] .category-lists .category-list-item:hover {  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);}/* 404页面隐藏分类卡片 */.type-404 #categoryBar,.type-404 .categoryBar-list {  display: none !important;}/* 首页分类卡片图标样式 */.categorybar-icon {  font-size: 1.6em;  opacity: 0.85;  margin-right: 6px;  vertical-align: middle;  transition: all 0.35s ease;}.categoryBar-list-item:nth-child(1) .categorybar-icon {  color: #e74c3c;}.categoryBar-list-item:nth-child(2) .categorybar-icon {  color: #f39c12;}.categoryBar-list-item:nth-child(3) .categorybar-icon {  color: #3498db;}.categoryBar-list-item:hover .categorybar-icon {  transform: scale(1.2);  opacity: 1;}/* 暗夜模式代码块背景透明 */[data-theme="dark"] {  --hl-bg: transparent !important;  --hltools-bg: rgba(255, 255, 255, 0.05) !important;}[data-theme="dark"] .read-mode {  --highlight-bg: transparent !important;}[data-theme="dark"] figure.highlight,[data-theme="dark"] pre,[data-theme="dark"] .code-container,[data-theme="dark"] #article-container figure.highlight,[data-theme="dark"] #article-container pre,[data-theme="dark"] #article-container .code-container,[data-theme="dark"] .container figure.highlight,[data-theme="dark"] .container pre,[data-theme="dark"] .container pre > code,[data-theme="dark"] .container code {  background: transparent !important;}[data-theme="dark"] figure.highlight::before,[data-theme="dark"] pre::before,[data-theme="dark"] #article-container figure.highlight::before,[data-theme="dark"] #article-container pre::before {  background: transparent !important;}[data-theme="dark"] .highlight-tools {  background: rgba(255, 255, 255, 0.05) !important;}[data-theme="dark"] figure.highlight {  border: 1px solid rgba(255, 255, 255, 0.1) !important;}[data-theme="dark"] .read-mode .container pre,[data-theme="dark"] .read-mode .container .highlight,[data-theme="dark"] .read-mode .container figure.highlight .hljs,[data-theme="dark"] .read-mode figure.highlight,[data-theme="dark"] .read-mode pre,[data-theme="dark"] .read-mode code {  background: transparent !important;}/* ========== 首页自定义排版 ========== */.recent-posts .homepage-header {  display: flex;  justify-content: space-between;  align-items: center;  margin-bottom: 32px;  padding-bottom: 16px;  border-bottom: 2px solid rgba(0, 0, 0, 0.06);}.homepage-title {  font-size: 26px;  font-weight: 700;  color: var(--font-color);  position: relative;  margin: 0;  padding-left: 14px;}.homepage-title::before {  content: '';  position: absolute;  left: 0;  top: 50%;  transform: translateY(-50%);  width: 4px;  height: 24px;  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);  border-radius: 2px;}.view-all-link {  color: #333;  text-decoration: none;  font-size: 14px;  transition: all 0.3s;  display: flex;  align-items: center;  gap: 4px;}.view-all-link:hover {  color: #667eea;}/* 文章卡片网格 */.article-grid {  display: grid;  grid-template-columns: repeat(3, 1fr);  gap: 24px;  margin-bottom: 40px;}@media (max-width: 1024px) {  .article-grid {    grid-template-columns: repeat(2, 1fr);  }}@media (max-width: 768px) {  .article-grid {    grid-template-columns: 1fr;  }}/* 文章卡片 */.article-card {  background: var(--card-bg);  border-radius: 16px;  overflow: hidden;  box-shadow: var(--card-box-shadow);  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);  cursor: pointer;  border: 1px solid rgba(255, 255, 255, 0.4);  -webkit-backdrop-filter: blur(20px) saturate(180%);  backdrop-filter: blur(20px) saturate(180%);}.article-card:hover {  transform: translateY(-8px);  box-shadow: var(--card-hover-box-shadow);}.article-cover {  width: 100%;  height: 200px;  overflow: hidden;  position: relative;}.article-cover img,.article-cover a img {  width: 100%;  height: 100%;  object-fit: cover;  transition: transform 0.4s ease;}.article-card:hover .article-cover img {  transform: scale(1.08);}.article-content {  padding: 20px;}.article-content .article-title {  font-size: 17px;  font-weight: 600;  color: var(--font-color);  margin: 0 0 10px 0;  line-height: 1.5;  display: -webkit-box;  -webkit-line-clamp: 2;  -webkit-box-orient: vertical;  overflow: hidden;}.article-content .article-title a {  color: inherit;  text-decoration: none;}.article-content .article-title .sticky {  color: #e74c3c;  margin-right: 6px;  font-size: 14px;}.article-content .article-description {  font-size: 13px;  color: #888;  line-height: 1.7;  margin: 0 0 16px 0;  display: -webkit-box;  -webkit-line-clamp: 2;  -webkit-box-orient: vertical;  overflow: hidden;}.article-content .article-meta {  display: flex;  gap: 16px;  font-size: 12px;  color: #aaa;  flex-wrap: wrap;}.article-content .meta-item {  display: flex;  align-items: center;  gap: 6px;}.article-content .meta-item i {  font-size: 12px;}.article-content .meta-item a {  color: inherit;  text-decoration: none;  transition: color 0.3s;}.article-content .meta-item a:hover {  color: #667eea;}/* 引言区域 - 独立圆角矩形卡片 */.quote-wrap {  margin-top: 8px;}.quote-section {  background: rgba(255, 255, 255, 0.3);  -webkit-backdrop-filter: blur(20px) saturate(180%);  backdrop-filter: blur(20px) saturate(180%);  border-radius: 16px;  padding: 40px 52px;  position: relative;  overflow: hidden;  display: flex;  align-items: flex-start;  gap: 24px;  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);  border: 1px solid rgba(255, 255, 255, 0.4);}/* 根本解决：用 CSS Grid 替换首页 flex 布局 */#content-inner.layout:has(#recent-posts) {  display: grid !important;  grid-template-columns: 74% 1fr;  gap: 20px;  align-items: start;}/* 最新文章容器 */#content-inner.layout:has(#recent-posts) > #recent-posts {  grid-column: 1;  width: 100% !important;  transition: none !important;}/* 覆盖 Butterfly 原始 hide-aside 规则，避免闪烁 */html.hide-aside #content-inner.layout:has(#recent-posts) > #recent-posts {  width: 100% !important;  transition: none !important;}#content-inner.layout:has(#recent-posts) > .aside-content {  grid-column: 2;  grid-row: 1 / 4;  width: 100% !important;  transition: opacity 0.3s ease, transform 0.3s ease;  opacity: 1;  transform: translateX(0);}#content-inner.layout:has(#recent-posts) > .quote-wrap {  grid-column: 1;  grid-row: 2;  transition: margin 0.3s ease;}#content-inner.layout:has(#recent-posts) > #pagination {  grid-column: 1;  grid-row: 3;}/* 单栏模式（隐藏侧边栏）动画 */html.hide-aside #content-inner.layout:has(#recent-posts) {  grid-template-columns: 1fr !important;  justify-content: center !important;}html.hide-aside #content-inner.layout:has(#recent-posts) > .aside-content {  display: block !important;  opacity: 0 !important;  transform: translateX(30px) !important;  pointer-events: none;  position: absolute;  visibility: hidden;  width: 0 !important;  overflow: hidden;}html.hide-aside #content-inner.layout:has(#recent-posts) > #recent-posts,html.hide-aside #content-inner.layout:has(#recent-posts) > .quote-wrap {  width: auto;}@media screen and (max-width: 900px) {  #content-inner.layout:has(#recent-posts) {    display: flex !important;    flex-direction: column !important;  }  #content-inner.layout:has(#recent-posts) > #recent-posts,  #content-inner.layout:has(#recent-posts) > .aside-content,  #content-inner.layout:has(#recent-posts) > .quote-wrap {    width: 100% !important;  }}.quote-section::before {  content: '';  position: absolute;  right: 0;  top: 0;  width: 40%;  height: 100%;  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><path d="M50,180 Q100,20 150,100 Q200,180 250,50 Q300,120 350,30" fill="none" stroke="rgba(0,0,0,0.03)" stroke-width="3"/></svg>') no-repeat center;  background-size: cover;  pointer-events: none;}.quote-icon {  font-size: 42px;  color: rgba(0, 0, 0, 0.15);  flex-shrink: 0;  margin-top: 2px;}.quote-content {  position: relative;  z-index: 1;  flex: 1;}.quote-text {  font-size: 22px;  color: #333;  line-height: 1.8;  font-weight: 400;  margin: 0 0 14px 0;  letter-spacing: 1px;}.quote-author {  font-size: 16px;  color: #999;  margin: 0;  font-weight: 400;}/* 夜间模式适配 */[data-theme="dark"] .recent-posts .homepage-header {  border-bottom-color: rgba(255, 255, 255, 0.08);}[data-theme="dark"] .view-all-link {  color: #888;}[data-theme="dark"] .view-all-link:hover {  color: #667eea;}[data-theme="dark"] .article-card {  border-color: rgba(255, 255, 255, 0.08);}[data-theme="dark"] .article-content .article-description {  color: #888;}[data-theme="dark"] .article-content .article-meta {  color: #666;}[data-theme="dark"] .quote-section {  background: rgba(30, 30, 30, 0.4);  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);  border-color: rgba(255, 255, 255, 0.08);}[data-theme="dark"] .quote-icon {  color: rgba(255, 255, 255, 0.1);}[data-theme="dark"] .quote-icon {  color: rgba(102, 126, 234, 0.4);}[data-theme="dark"] .quote-text {  color: #ccc;}[data-theme="dark"] .quote-author {  color: #888;}/* 阅读模式下保留背景图片 */.read-mode #web_bg {  display: block !important;}body.read-mode {  background: transparent !important;}/* 暗色阅读模式下：去掉所有毛玻璃、圆角、边框、阴影，全部透明 */[data-theme="dark"] .read-mode .cardHover,[data-theme="dark"] .read-mode .layout > div:first-child:not(.nc),[data-theme="dark"] .read-mode #recent-posts .recent-post-item,[data-theme="dark"] .read-mode #aside-content .card-widget,[data-theme="dark"] .read-mode .layout .pagination > *:not(.space),[data-theme="dark"] .read-mode .article-card,[data-theme="dark"] .read-mode .quote-section,[data-theme="dark"] .read-mode #post,[data-theme="dark"] .read-mode #article-container,[data-theme="dark"] .read-mode .container {  -webkit-backdrop-filter: none !important;  backdrop-filter: none !important;  background: transparent !important;  background-color: transparent !important;  border: none !important;  box-shadow: none !important;  border-radius: 0 !important;}[data-theme="dark"] .read-mode figure.highlight,[data-theme="dark"] .read-mode pre,[data-theme="dark"] .read-mode code,[data-theme="dark"] .read-mode .highlight-tools,[data-theme="dark"] .read-mode .container pre,[data-theme="dark"] .read-mode .container code,[data-theme="dark"] .read-mode .container figure.highlight {  background: transparent !important;  background-color: transparent !important;  border: none !important;  box-shadow: none !important;  border-radius: 0 !important;}]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script>]]></content>
       
     </entry>
     
